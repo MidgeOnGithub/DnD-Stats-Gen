@@ -3,5 +3,10 @@
 #define DND_STATS_GEN_SCRIPT_H
 #endif //DND_STATS_GEN_SCRIPT_H
 
-void master_script(int abilities[6]);
-void abilities_3d6(int a[6]);
+#include <map>
+#include <vector>
+
+void master_script();
+void abilities_3d6(std::vector<int> scores[6]);
+void assign_abilities(std::vector<int> scores[6], std::map<std::string, int> dict);
+void print_ability_scores(std::vector<int> scores);
