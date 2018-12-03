@@ -34,7 +34,7 @@ int roll_dice(int dice_count, int die_sides, bool verbose, bool slow, int wait) 
 
         if (verbose)
         {
-            std::cout << "Roll " << i << ": " << landing << "\n";
+            std::cout << "Die " << i << ": " << landing << "\n";
 
             if (slow)
             {
