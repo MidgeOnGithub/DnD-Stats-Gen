@@ -22,8 +22,10 @@ public:
     void print_summary();  // Pretty-prints the dictionary
 
 private:
-    int scores[6] = {0, 0, 0, 0, 0, 0};  // Int array storing score values
-    std::string names[6] = {"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};  // String array storing ability names
+    int scores[6] = {0, 0, 0, 0, 0, 0};  // Stores score values
+    std::string names[6] = {"Strength", "Dexterity",
+                            "Constitution", "Intelligence",
+                            "Wisdom", "Charisma"};  // Ability names
     std::map<std::string, int> score_dict; // Dictionary mapping the above
 
 };

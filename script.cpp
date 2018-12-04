@@ -5,25 +5,28 @@
 #include "dice.h"
 #include "script.h"
 
-
 void master_script() {
 
     // Initialize the scores vector
     int scores[6];
 
     // Determine if the user would like to generate scores or use the pooling method
-    std::cout << "Would you like to use a 3d6 random ability score generation? (y/n): ";
+    std::cout << "Would you like to perform a 3d6 random ability score generation? (y/n): ";
     std::string confirm;
     getline(std::cin, confirm);
     if (confirm == "y" || confirm == "yes" || confirm == "Y" || confirm == "Yes")
     {
-        abilities_3d6(scores);
-    } else {
+        generate_3d6(scores);
+    } else if (confirm == "4d6")
+    {
+        // Implement 4d6, drop lowest option
+    } else
+    {
         // Implement points-pool assignment system
     }
 }
 
-void abilities_3d6(int* scores) {
+void generate_3d6(int *scores) {
 
     for (int i = 0; i < 6; i++)
     {
@@ -34,6 +37,7 @@ void abilities_3d6(int* scores) {
 
 void assign_abilities(int* scores, abilities* ab) {
 
+    /* likely unnecessary with new class
     // Copy the input vector to prevent modification
     int s[6];
 
@@ -41,4 +45,7 @@ void assign_abilities(int* scores, abilities* ab) {
     {
         s[i] = scores[i];
     }
+    */
+
+
 }

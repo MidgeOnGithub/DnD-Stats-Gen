@@ -6,5 +6,5 @@
 #include "abilities.h"
 
 void master_script();
-void abilities_3d6(int* scores);
-void assign_abilities(int* scores, abilities* ab);;
+void generate_3d6(int *scores);
+void assign_abilities(int* scores, abilities* ab);
