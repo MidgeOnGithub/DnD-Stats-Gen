@@ -20,9 +20,9 @@ int main() {
     if (confirm == "3" || confirm == "3d6") {
         generate_3d6(ab);
     } else if (confirm == "4" || confirm == "4d6") {
-        // Implement 4d6, drop lowest option
+        generate_4d6_drop(ab);
     } else {
-        // Implement points-pool assignment system
+        // Implement points-buy assignment system
     }
 
     // Assign scores to abilities
