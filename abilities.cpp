@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <iomanip>
 
 #include "abilities.h"
 
@@ -15,7 +16,7 @@ int abilities::get_ability_score(std::string name) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        std::cout << "Name given is not a listed ability." << std::endl;
+        std::cout << "Argument is not a listed ability." << std::endl;
         exit(1);
     }
 
@@ -26,7 +27,7 @@ void abilities::set_ability_score(std::string name, int score) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        std::cout << "Name given is not a listed ability." << std::endl;
+        std::cout << "Argument is not a listed ability." << std::endl;
         exit(1);
     }
 
@@ -37,7 +38,7 @@ std::string abilities::get_name(int i) {
 
     if (i > 5)
     {
-        std::cout << "Name index does not exist." << std::endl;
+        std::cout << "Argument index does not exist." << std::endl;
         exit(2);
     }
 
@@ -48,7 +49,7 @@ int abilities::get_score(int i) {
 
     if (i > 5)
     {
-        std::cout << "Score index does not exist." << std::endl;
+        std::cout << "Argument index does not exist." << std::endl;
         exit(2);
     }
 
@@ -83,6 +84,7 @@ void abilities::print_summary() {
     std::cout << std::endl << "Assigned ability scores:" << std::endl;
     for (int i = 0; i < 6; i++)
     {
-        std::cout << names[i] << ": " << scores[i] << std::endl;
+        std::cout << std::setw(18) << std::left << names[i] + ": "
+                  << std::setw(2) << scores[i] << std::endl;
     }
 }
