@@ -6,12 +6,24 @@
 #include "script.h"
 
 int main() {
-    std::cout << "\nWelcome to the command-line DND Stats Generator!\n========================================\n\n";
 
-    master_script();
+    std::cout << "\nWelcome to the command-line DND Stats Generator!\n========================================\n\n";
 
     // Instantiate abilities class
     abilities* ab = new abilities();
+
+    // Determine if the user would like to generate scores by 3d6, 4d6, or pooling method.
+    std::cout << "Would you like to perform a \"classic\" 3d6 ability score generation?" << std::endl
+              << "Or would you prefer a 4d6 with the lowest roll dropped? (3d6/4d6): ";
+    std::string confirm;
+    getline(std::cin, confirm);
+    if (confirm == "3" || confirm == "3d6") {
+        generate_3d6(ab);
+    } else if (confirm == "4" || confirm == "4d6") {
+        // Implement 4d6, drop lowest option
+    } else {
+        // Implement points-pool assignment system
+    }
 
     // Assign scores to abilities
     // Having code here would be good

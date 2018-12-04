@@ -16,8 +16,7 @@ int abilities::get_ability_score(std::string name) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        std::cout << "Argument is not a listed ability." << std::endl;
-        exit(1);
+        indexerror(1);
     }
 
     return score_dict[name];
@@ -27,36 +26,29 @@ void abilities::set_ability_score(std::string name, int score) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        std::cout << "Argument is not a listed ability." << std::endl;
-        exit(1);
+        indexerror(2);
     }
 
     score_dict[name] = score;
-}
-
-std::string abilities::get_name(int i) {
-
-    if (i > 5)
-    {
-        std::cout << "Argument index does not exist." << std::endl;
-        exit(2);
-    }
-
-    return abilities::names[i];
 }
 
 int abilities::get_score(int i) {
 
     if (i > 5)
     {
-        std::cout << "Argument index does not exist." << std::endl;
-        exit(2);
+        indexerror(3);
     }
 
     return scores[i];
 }
 
 void abilities::set_score(int i, int score) {
+
+    if (i > 5)
+    {
+        indexerror(4);
+    }
+
     scores[i] = score;
 }
 
@@ -82,9 +74,31 @@ void abilities::print_scores(bool names_only) {
 void abilities::print_summary() {
 
     std::cout << std::endl << "Assigned ability scores:" << std::endl;
-    for (int i = 0; i < 6; i++)
+    for (auto &pair : score_dict)
     {
-        std::cout << std::setw(18) << std::left << names[i] + ": "
-                  << std::setw(2) << scores[i] << std::endl;
+        std::cout << std::setw(18) << std::left << pair.first + ": "
+                  << std::setw(2) << pair.second << std::endl;
+    }
+}
+
+void abilities::indexerror(int code) {
+
+    std::string message;
+
+    switch(code) {
+        case 1 : message = "Name passed to get_ability_score is not an ability.";
+                 exit(1);
+
+        case 2 : message = "Name passed to set_ability_score is not an ability.";
+                 exit(2);
+
+        case 3 : message = "Index passed to get_score is out of range.";
+                 exit(3);
+
+        case 4 : message = "Index passed to set_score is out of range.";
+                 exit(4);
+
+        default : message = "Something else went wrong.";
+                  exit(9);
     }
 }
