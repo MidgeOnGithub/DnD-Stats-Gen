@@ -1,19 +1,17 @@
 
-#include <cstring>
-#include <ctype.h>
 #include <iostream>
-#include <iterator>
 #include <stdio.h>
 
 #include "dice.h"
 #include "script.h"
 
+
 void master_script() {
 
     // Initialize the scores vector
-    std::vector<int> scores[6];
+    int scores[6];
 
-    // Determine which script the user would like to run
+    // Determine if the user would like to generate scores or use the pooling method
     std::cout << "Would you like to use a 3d6 random ability score generation? (y/n): ";
     std::string confirm;
     getline(std::cin, confirm);
@@ -23,18 +21,9 @@ void master_script() {
     } else {
         // Implement points-pool assignment system
     }
-
-    // Print complete list
-    print_ability_scores(*scores);
-
-    // Assign scores to abilities
-    std::map<std::string, int> abilities = {
-            {"Strength", 0}, {"Dexterity", 0}, {"Constitution", 0}, {"Intelligence", 0}, {"Wisdom", 0}, {"Charisma", 0}
-    };
-    assign_abilities(scores, abilities);
 }
 
-void abilities_3d6(std::vector<int> scores[6]) {
+void abilities_3d6(int* scores) {
 
     for (int i = 0; i < 6; i++)
     {
@@ -43,33 +32,13 @@ void abilities_3d6(std::vector<int> scores[6]) {
     }
 }
 
-void assign_abilities(std::vector<int> scores[6], std::map<std::string, int> abil) {
+void assign_abilities(int* scores, abilities* ab) {
 
     // Copy the input vector to prevent modification
-    std::vector<int> s[6];
+    int s[6];
 
     for (int i = 0; i < 6; i++)
     {
-        scores[i] = abil[i];
+        s[i] = scores[i];
     }
-}
-
-void print_ability_scores(std::vector<int> scores) {
-
-    // Get a's length
-    int length = scores.size();
-
-    // Pretty-printing
-    std::cout << std::endl << "List of ability scores: [";
-    for (int i : scores)
-    {
-        std::cout << i
-
-        if (i != length - 1)  // Don't print a comma and space for the last element
-        {
-            printf(", ");
-        }
-    }
-    std::cout << "]" << std::endl;
-
 }

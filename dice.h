@@ -1,6 +1,3 @@
-//
-// Created by midge on 12/2/18.
-//
 
 #ifndef DND_STATS_GEN_DICE_H
 #define DND_STATS_GEN_DICE_H
