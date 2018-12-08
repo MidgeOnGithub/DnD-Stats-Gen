@@ -73,7 +73,7 @@ void abilities::print_scores(bool names_only) {
             get_score(i);
         }
 
-        if (i != 5)  // Don't print a comma and space for the last element
+        if (i < 5)  // Don't print a comma and space for the last element
         {
             std::cout << ", ";
         }

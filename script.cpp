@@ -42,46 +42,71 @@ void generate_4d6_drop(abilities* ab) {
 
 void assign_abilities(abilities* ab) {
 
+    // Create a copy of ab's scores array so as to prevent class calls and data modification
     int s[6];
-
     for (int i = 0; i < 6; i++)
     {
         s[i] = ab->get_score(i);
     }
 
+    // Create an array and int which will specify which values have been assigned
+    bool assigned[6] = {false, false, false, false, false, false};
+    int a_count = 0;
+
     for (int i = 0; i < 6; i++)
     {
-        // Create the prompt to use for int_input
-        std::string ab_name = ab->get_name(i);
-        std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
-
         // Initialize control variables
         int sc = 0;
         bool keep_going = true;
+        std::string ab_name = ab->get_name(i);
 
+        // If only one value remains, auto-assign it to the last ability
+        if (a_count == 5)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                if (!assigned[j]) sc = s[j];
+            }
+            ab->set_ability_score(ab_name, sc);
+            break;
+        }
+
+        // Create the prompt to use for int_input
+        std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
         while (keep_going)
         {
-            // Tell the user what options are left
+            // Print the unassigned abilities
+            // Consider placing all printing code into a function for better readability and manipulation
             std::cout << "Available scores: [";
-            for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 6; j++)
             {
-                std::cout << s[i];
+                if (assigned[j]) continue;
 
-                if (i != 5)  // Don't print a comma and space for the last element
+                std::cout << s[j];
+
+                if (j != 5)  // Don't print a comma and space for the last element
                 {
-                    std::cout << ", ";
+                    for (int k = j + 1; k < 6; k++)  // If all remaining indices are assigned, current index is last
+                    {
+                        if (!assigned[k])
+                        {
+                            std::cout << ", ";
+                            break;
+                        }
+                    }
                 }
             }
             std::cout << "]" << std::endl;
 
-            // Take an int from user and see if it is within remaining scores, loop if not
+            // Take an int from user, check if it is an unassigned score, loop if not
             sc = int_input(prompt);
-
             for (int i = 0; i < 6; i++)
             {
-                if (sc == s[i])
+                if (sc == s[i] && !assigned[i])
                 {
-                    keep_going = false;  // If the given input matches at least one value in ab->scores, progress
+                    assigned[i] = true;
+                    a_count += 1;
+                    keep_going = false;
                     break;
                 }
             }
