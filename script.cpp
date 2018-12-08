@@ -6,10 +6,6 @@
 #include "dice.h"
 #include "script.h"
 
-void master_script() {
-    // This function may be deprecated after moving generation choice and class instantiation to main
-}
-
 void generate_3d6(abilities* ab) {
 
     for (int i = 0; i < 6; i++)
@@ -44,17 +40,54 @@ void generate_4d6_drop(abilities* ab) {
     }
 }
 
-void assign_abilities(int* scores, abilities* ab) {
+void assign_abilities(abilities* ab) {
 
-    /* likely unnecessary with new class
-    // Copy the input vector to prevent modification
     int s[6];
 
     for (int i = 0; i < 6; i++)
     {
-        s[i] = scores[i];
+        s[i] = ab->get_score(i);
     }
-    */
 
+    for (int i = 0; i < 6; i++)
+    {
+        // Create the prompt to use for int_input
+        std::string ab_name = ab->get_name(i);
+        std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
+
+        // Initialize control variables
+        int sc = 0;
+        bool keep_going = true;
+
+        while (keep_going)
+        {
+            // Tell the user what options are left
+            std::cout << "Available scores: [";
+            for (int i = 0; i < 6; i++)
+            {
+                std::cout << s[i];
+
+                if (i != 5)  // Don't print a comma and space for the last element
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << "]" << std::endl;
+
+            // Take an int from user and see if it is within remaining scores, loop if not
+            sc = int_input(prompt);
+
+            for (int i = 0; i < 6; i++)
+            {
+                if (sc == s[i])
+                {
+                    keep_going = false;  // If the given input matches at least one value in ab->scores, progress
+                    break;
+                }
+            }
+        }
+
+        ab->set_ability_score(ab_name, sc);
+    }
 
 }

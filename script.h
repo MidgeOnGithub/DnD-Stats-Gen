@@ -5,7 +5,6 @@
 
 #include "abilities.h"
 
-void master_script();
 void generate_3d6(abilities* ab);
 void generate_4d6_drop(abilities* ab);
-void assign_abilities(int* scores, abilities* ab);
+void assign_abilities(abilities* ab);

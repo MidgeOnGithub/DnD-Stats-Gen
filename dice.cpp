@@ -18,7 +18,6 @@ int roll_dice(int dice_count, int die_sides, bool verbose, bool slow, int wait) 
     {
         die_sides = int_input("Now enter how many sides each die has: ");
     }
-    std::cout << std::endl;
 
     // Perform and return a pseudo-random roll
     static std::random_device rand;
@@ -81,5 +80,6 @@ int int_input(std::string initial_prompt) {
         prompt_flag = true;
     }
 
+    std::cout << std::endl;
     return num;
 }

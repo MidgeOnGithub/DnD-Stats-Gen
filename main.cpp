@@ -26,7 +26,7 @@ int main() {
     }
 
     // Assign scores to abilities
-    // Having code here would be good
+    assign_abilities(ab);
 
     // At the end, print an abilities summary
     ab->print_summary();

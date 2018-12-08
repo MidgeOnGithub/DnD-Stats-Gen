@@ -52,9 +52,19 @@ void abilities::set_score(int i, int score) {
     scores[i] = score;
 }
 
+std::string abilities::get_name(int i) {
+
+    if (i > 5)
+    {
+        indexerror(5);
+    }
+
+    return names[i];
+}
+
 void abilities::print_scores(bool names_only) {
 
-    std::cout << std::endl << "List of ability scores: [";
+    std::cout << std::endl << "Ability scores: [";
     for (int i = 0; i < 6; i++)
     {
         if (names_only) {
@@ -98,7 +108,10 @@ void abilities::indexerror(int code) {
         case 4 : message = "Index passed to set_score is out of range.";
                  exit(4);
 
-        default : message = "Something else went wrong.";
+        case 5 : message = "Index passed to get_name is out of range.";
+                 exit(5);
+
+        default : message = "Something else went wrong running an abilities class function.";
                   exit(9);
     }
 }
