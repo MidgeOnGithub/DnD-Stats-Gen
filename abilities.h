@@ -20,10 +20,11 @@ public:
 
     std::string get_name(int i);
 
-    void print_scores(bool names_only = false);  // Pretty-prints the array or ability names
-    void print_summary();  // Pretty-prints the dictionary
+    std::string print_scores(bool names_only = false);  // Pretty-prints the array or ability names
+    std::string print_summary();  // Pretty-prints the dictionary
 
-    void indexerror(int code);  // Prints an error message and exits instead of using garbage memory
+    void index_error(int code);  // Prints an error message and exits instead of using garbage memory
+
 
 private:
 
