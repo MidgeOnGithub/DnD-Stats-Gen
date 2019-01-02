@@ -92,10 +92,11 @@ std::string abilities::print_summary() {
     std::ostringstream summary;
     summary << "Assigned ability scores:" << std::endl
             << "--------------------" << std::endl;
-    for (auto &pair : score_dict)
+    for (int i = 0; i < 6; i++)
     {
-        summary << std::setw(18) << std::left << pair.first + ": "
-                << std::setw(2) << std::right << pair.second << std::endl;
+        std::string ab_name = get_name(i);
+        summary << std::setw(18) << std::left << ab_name + ": "
+                << std::setw(2) << std::right << score_dict[ab_name] << std::endl;
     }
     summary << "--------------------" << std::endl;
 
@@ -105,7 +106,8 @@ std::string abilities::print_summary() {
 
 void abilities::index_error(int code) {
 
-    switch(code) {
+    switch(code)
+    {
         case 1 : std::cout << "Name passed to get_ability_score is not an ability.";
                  exit(1);
 

@@ -30,9 +30,9 @@ private:
 
     int scores[6] = {0, 0, 0, 0, 0, 0};  // Stores score values
 
-    std::string names[6] = {"Charisma", "Constitution",
-                            "Dexterity", "Intelligence",
-                            "Strength", "Wisdom"};  // Ability names
+    // List ability names in the order given by the official character creation sheet
+    std::string names[6] = {"Strength", "Dexterity", "Constitution",
+                             "Intelligence", "Wisdom", "Charisma"};
 
     std::map<std::string, int> score_dict; // Dictionary mapping the above
 
