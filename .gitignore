@@ -1,4 +1,7 @@
-# CLion files to ignore
+# Editor files
 .idea/
+.vscode/
+
+# CMake files
 cmake*/
 CMake*
