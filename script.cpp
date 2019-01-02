@@ -49,14 +49,18 @@ void assign_abilities(abilities* ab) {
         s[i] = ab->get_score(i);
     }
 
-    // Create an array and int which will specify which values have been assigned
+    // Create an array and int which specify which values have been assigned
     bool assigned[6] = {false, false, false, false, false, false};
     int a_count = 0;
+    // Control variable to determine if available scores should be displayed
+    bool first_time_asking = true;
 
     for (int i = 0; i < 6; i++)
     {
+
         // Initialize control variables
-        int sc = 0;
+        int num = 0;
+
         bool keep_going = true;
         std::string ab_name = ab->get_name(i);
 
@@ -65,9 +69,9 @@ void assign_abilities(abilities* ab) {
         {
             for (int j = 0; j < 6; j++)
             {
-                if (!assigned[j]) sc = s[j];
+                if (!assigned[j]) num = s[j];
             }
-            ab->set_ability_score(ab_name, sc);
+            ab->set_ability_score(ab_name, num);
             break;
         }
 
@@ -75,34 +79,40 @@ void assign_abilities(abilities* ab) {
         std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
         while (keep_going)
         {
-            // Print the unassigned abilities
-            // Consider placing all printing code into a function for better readability and manipulation
-            std::cout << "Available scores: [";
-            for (int j = 0; j < 6; j++)
-            {
-                if (assigned[j]) continue;
 
-                std::cout << s[j];
-
-                if (j != 5)  // Don't print a comma and space for the last element
+            if (!first_time_asking) {
+                // Print the unassigned abilities
+                // Consider placing all printing code into a function for better readability and manipulation
+                std::cout << "Available scores: [";
+                for (int j = 0; j < 6; j++)
                 {
-                    for (int k = j + 1; k < 6; k++)  // If all remaining indices are assigned, current index is last
+                    if (assigned[j]) continue;
+
+                    std::cout << s[j];
+
+                    if (j != 5)  // Don't print a comma and space for the last element
                     {
-                        if (!assigned[k])
+                        for (int k = j + 1; k < 6; k++)  // If all remaining indices are assigned, current index is last
                         {
-                            std::cout << ", ";
-                            break;
+                            if (!assigned[k])
+                            {
+                                std::cout << ", ";
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            std::cout << "]" << std::endl;
 
-            // Take an int from user, check if it is an unassigned score, loop if not
-            sc = int_input(prompt);
+                std::cout << "]" << std::endl;
+            }  // end of first_time_asking block
+
+            // Get int from user using int_input from dice roller
+            num = int_input(prompt);
             for (int i = 0; i < 6; i++)
             {
-                if (sc == s[i] && !assigned[i])
+                // Check if num is an unassigned score
+                // If not, get another input
+                if (num == s[i] && !assigned[i])
                 {
                     assigned[i] = true;
                     a_count += 1;
@@ -112,7 +122,7 @@ void assign_abilities(abilities* ab) {
             }
         }
 
-        ab->set_ability_score(ab_name, sc);
+        first_time_asking = false;
+        ab->set_ability_score(ab_name, num);
     }
-
 }

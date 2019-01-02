@@ -16,7 +16,7 @@ int abilities::get_ability_score(std::string name) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        indexerror(1);
+        index_error(1);
     }
 
     return score_dict[name];
@@ -26,7 +26,7 @@ void abilities::set_ability_score(std::string name, int score) {
 
     if (score_dict.find(name) == score_dict.end())
     {
-        indexerror(2);
+        index_error(2);
     }
 
     score_dict[name] = score;
@@ -36,7 +36,7 @@ int abilities::get_score(int i) {
 
     if (i > 5)
     {
-        indexerror(3);
+        index_error(3);
     }
 
     return scores[i];
@@ -46,7 +46,7 @@ void abilities::set_score(int i, int score) {
 
     if (i > 5)
     {
-        indexerror(4);
+        index_error(4);
     }
 
     scores[i] = score;
@@ -56,62 +56,72 @@ std::string abilities::get_name(int i) {
 
     if (i > 5)
     {
-        indexerror(5);
+        index_error(5);
     }
 
     return names[i];
 }
 
-void abilities::print_scores(bool names_only) {
+std::string abilities::print_scores(bool names_only) {
 
-    std::cout << std::endl << "Ability scores: [";
+    // Use ostringstream as an easy way to format as if using std::cout
+    std::ostringstream scores;
+    scores << "[";
     for (int i = 0; i < 6; i++)
     {
         if (names_only) {
-            std::cout << names[i];
+            scores << names[i];
         } else {
-            get_score(i);
+            scores << get_score(i);
         }
 
         if (i < 5)  // Don't print a comma and space for the last element
         {
-            std::cout << ", ";
+            scores << ", ";
         }
     }
-    std::cout << "]" << std::endl;
+    scores << "]" << std::endl;
+
+    // Return as a string
+    return scores.str();
 }
 
-void abilities::print_summary() {
+std::string abilities::print_summary() {
 
-    std::cout << std::endl << "Assigned ability scores:" << std::endl;
+    // Use ostringstream as an easy way to format as if using std::cout
+    std::ostringstream summary;
+    summary << "Assigned ability scores:" << std::endl
+            << "--------------------" << std::endl;
     for (auto &pair : score_dict)
     {
-        std::cout << std::setw(18) << std::left << pair.first + ": "
-                  << std::setw(2) << pair.second << std::endl;
+        summary << std::setw(18) << std::left << pair.first + ": "
+                << std::setw(2) << std::right << pair.second << std::endl;
     }
+    summary << "--------------------" << std::endl;
+
+    // Return as a string
+    return summary.str();
 }
 
-void abilities::indexerror(int code) {
-
-    std::string message;
+void abilities::index_error(int code) {
 
     switch(code) {
-        case 1 : message = "Name passed to get_ability_score is not an ability.";
+        case 1 : std::cout << "Name passed to get_ability_score is not an ability.";
                  exit(1);
 
-        case 2 : message = "Name passed to set_ability_score is not an ability.";
+        case 2 : std::cout << "Name passed to set_ability_score is not an ability.";
                  exit(2);
 
-        case 3 : message = "Index passed to get_score is out of range.";
+        case 3 : std::cout << "Index passed to get_score is out of range.";
                  exit(3);
 
-        case 4 : message = "Index passed to set_score is out of range.";
+        case 4 : std::cout << "Index passed to set_score is out of range.";
                  exit(4);
 
-        case 5 : message = "Index passed to get_name is out of range.";
+        case 5 : std::cout << "Index passed to get_name is out of range.";
                  exit(5);
 
-        default : message = "Something else went wrong running an abilities class function.";
+        default : std::cout << "Unknown index_error while running an abilities class method.";
                   exit(9);
     }
 }
