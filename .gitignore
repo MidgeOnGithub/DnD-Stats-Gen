@@ -2,6 +2,6 @@
 .idea/
 .vscode/
 
-# CMake files
+# CMake Build files
 cmake*/
-CMake*
+
