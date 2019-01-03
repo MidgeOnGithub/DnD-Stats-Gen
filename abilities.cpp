@@ -8,7 +8,7 @@ abilities::abilities() {
 
     for (int i = 0; i < 6; i++)
     {
-        score_dict[names[i]] = scores[i];  // Initialize a dictionary with names as keys, values of 0 (no arg needed)
+        score_dict[names[i]] = rolled_scores[i];  // Initialize a dictionary with names as keys, values of 0 (no arg needed)
     }
 }
 
@@ -32,48 +32,54 @@ void abilities::set_ability_score(std::string name, int score) {
     score_dict[name] = score;
 }
 
-int abilities::get_score(int i) {
-
-    if (i > 5)
-    {
-        index_error(3);
-    }
-
-    return scores[i];
-}
-
-void abilities::set_score(int i, int score) {
-
-    if (i > 5)
-    {
-        index_error(4);
-    }
-
-    scores[i] = score;
-}
-
-std::string abilities::get_name(int i) {
-
-    if (i > 5)
-    {
-        index_error(5);
-    }
-
-    return names[i];
-}
-
-std::string abilities::print_scores(bool names_only) {
+std::string abilities::print_ability_scores() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream scores;
     scores << "[";
     for (int i = 0; i < 6; i++)
     {
-        if (names_only) {
-            scores << names[i];
-        } else {
-            scores << get_score(i);
+        std::string name = get_ability_name(i);
+        scores << get_ability_score(name);
+        if (i < 5)  // Don't print a comma and space for the last element
+        {
+            scores << ", ";
         }
+    }
+    scores << "]" << std::endl;
+
+    // Return as a string
+    return scores.str();
+}
+
+int abilities::get_rolled_score(int i) {
+
+    if (i > 5)
+    {
+        index_error(3);
+    }
+
+    return rolled_scores[i];
+}
+
+void abilities::set_rolled_score(int i, int score) {
+
+    if (i > 5)
+    {
+        index_error(4);
+    }
+
+    rolled_scores[i] = score;
+}
+
+std::string abilities::print_rolled_scores() {
+
+    // Use ostringstream as an easy way to format as if using std::cout
+    std::ostringstream scores;
+    scores << "[";
+    for (int i = 0; i < 6; i++)
+    {
+        scores << get_rolled_score(i);
 
         if (i < 5)  // Don't print a comma and space for the last element
         {
@@ -86,7 +92,17 @@ std::string abilities::print_scores(bool names_only) {
     return scores.str();
 }
 
-std::string abilities::print_summary() {
+std::string abilities::get_ability_name(int i) {
+
+    if (i > 5)
+    {
+        index_error(5);
+    }
+
+    return names[i];
+}
+
+std::string abilities::print_ability_summary() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
@@ -94,7 +110,7 @@ std::string abilities::print_summary() {
             << "--------------------" << std::endl;
     for (int i = 0; i < 6; i++)
     {
-        std::string ab_name = get_name(i);
+        std::string ab_name = get_ability_name(i);
         summary << std::setw(18) << std::left << ab_name + ": "
                 << std::setw(2) << std::right << score_dict[ab_name] << std::endl;
     }
@@ -104,9 +120,9 @@ std::string abilities::print_summary() {
     return summary.str();
 }
 
-void abilities::index_error(int code) {
+void abilities::index_error(int e_code) {
 
-    switch(code)
+    switch(e_code)
     {
         case 1 : std::cout << "Name passed to get_ability_score is not an ability.";
                  exit(1);

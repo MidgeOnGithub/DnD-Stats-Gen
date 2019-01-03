@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "abilities.h"
 #include "dice.h"
 #include "script.h"
 
@@ -10,8 +11,8 @@ void generate_3d6(abilities* ab) {
 
     for (int i = 0; i < 6; i++)
     {
-        ab->set_score(i, roll_dice(3, 6, false, false));
-        std::cout << "Roll " << i + 1 << " = " << ab->get_score(i) << std::endl;
+        ab->set_rolled_score(i, roll_dice(3, 6, false, false));
+        std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
     }
 }
 
@@ -35,8 +36,8 @@ void generate_4d6_drop(abilities* ab) {
             roll_total += rolls[roll];
         }
 
-        ab->set_score(i, roll_total);
-        std::cout << "Roll " << i + 1 << " = " << ab->get_score(i) << std::endl;
+        ab->set_rolled_score(i, roll_total);
+        std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
     }
 }
 
@@ -46,7 +47,7 @@ void assign_abilities(abilities* ab) {
     int s[6];
     for (int i = 0; i < 6; i++)
     {
-        s[i] = ab->get_score(i);
+        s[i] = ab->get_rolled_score(i);
     }
 
     // Create an array and int which specify which values have been assigned
@@ -62,7 +63,7 @@ void assign_abilities(abilities* ab) {
         int num = 0;
 
         bool keep_going = true;
-        std::string ab_name = ab->get_name(i);
+        std::string ab_name = ab->get_ability_name(i);
 
         // If only one value remains, auto-assign it to the last ability
         if (a_count == 5)
