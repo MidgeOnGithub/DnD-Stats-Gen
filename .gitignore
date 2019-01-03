@@ -1,7 +1,8 @@
 # Editor files
 .idea/
 .vscode/
+.vs/
 
-# CMake Build files
-cmake*/
-
+# CMake and build files
+compile/
+bin/

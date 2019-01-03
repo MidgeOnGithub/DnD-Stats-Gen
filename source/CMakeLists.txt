@@ -10,3 +10,7 @@ add_executable(DnD_Stats_Gen
         script.cpp
         abilities.cpp
 )
+
+# Get parent directory to place output files outside of source folder
+get_filename_component(PAR_DIR ${CMAKE_BINARY_DIR} DIRECTORY)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PAR_DIR}/bin)
