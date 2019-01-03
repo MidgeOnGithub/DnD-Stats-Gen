@@ -1,7 +1,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <stdio.h>
+#include <sstream>
 
 #include "abilities.h"
 #include "dice.h"
@@ -11,7 +11,8 @@ void generate_3d6(abilities* ab) {
 
     for (int i = 0; i < 6; i++)
     {
-        ab->set_rolled_score(i, roll_dice(3, 6, false, false));
+        int roll = roll_dice(3, 6, false, false);
+        ab->set_rolled_score(i, roll);
         std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
     }
 }
@@ -23,34 +24,35 @@ void generate_4d6_drop(abilities* ab) {
 
         // Populate an array of 4 rolls
         int rolls[4];
-        for (int j = 0; j < 4; j++)
+        for (int &r : rolls)
         {
-            rolls[j] = roll_dice(1, 6, false, false);
+            r = roll_dice(1, 6, false, false);
         }
 
-        // Use only the 3 highest rolls
-        std::sort(std::begin(rolls), std::end(rolls));
-        int roll_total = 0;
-        for (int roll = 1; roll < 4; roll++)
+        // Sum only the 3 highest rolls
+        std::sort(std::begin(rolls), std::end(rolls));  // Sort by increasing value
+        int rolled_score = 0;
+        for (int r = 1; r < 4; r++)  // Access the three highest values
         {
-            roll_total += rolls[roll];
+            rolled_score += rolls[r];
         }
 
-        ab->set_rolled_score(i, roll_total);
+        // Place sum into given class, display roll result
+        ab->set_rolled_score(i, rolled_score);
         std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
     }
 }
 
 void assign_abilities(abilities* ab) {
 
-    // Create a copy of ab's scores array so as to prevent class calls and data modification
-    int s[6];
+    // Create a copy of ab's scores array (prevent class calls and modification)
+    int rs[6];  // rs = rolled scores
     for (int i = 0; i < 6; i++)
     {
-        s[i] = ab->get_rolled_score(i);
+        rs[i] = ab->get_rolled_score(i);
     }
 
-    // Create an array and int which specify which values have been assigned
+    // Create an array and helper int which specify which scores have been assigned
     bool assigned[6] = {false, false, false, false, false, false};
     int a_count = 0;
     // Control variable to determine if available scores should be displayed
@@ -61,7 +63,6 @@ void assign_abilities(abilities* ab) {
 
         // Initialize control variables
         int num = 0;
-
         bool keep_going = true;
         std::string ab_name = ab->get_ability_name(i);
 
@@ -70,52 +71,55 @@ void assign_abilities(abilities* ab) {
         {
             for (int j = 0; j < 6; j++)
             {
-                if (!assigned[j]) num = s[j];
+                if (!assigned[j]) num = rs[j];
             }
             ab->set_ability_score(ab_name, num);
             break;
         }
 
+        // Pretty-print the unassigned abilities
+        std::ostringstream scores_left;
+        scores_left << "Available scores: [";
+        for (int j = 0; j < 6; j++)
+        {
+            // Skip writing the value if it has already been assigned
+            if (assigned[j]) continue;
+            scores_left << rs[j];
+            if (j != 5)  // Don't print a comma and space for the last element
+            {
+                for (int k = j + 1; k < 6; k++)  // If remaining indices are assigned, current index is last
+                {
+                    // If a remaining index is unassigned, current index is not last, thus the comma and space
+                    if (!assigned[k])
+                    {
+                        scores_left << ", ";
+                        break;
+                    }
+                }
+            }
+        }
+        scores_left << "]";
+
         // Create the prompt to use for int_input
         std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
         while (keep_going)
         {
-
-            if (!first_time_asking) {
-                // Print the unassigned abilities
-                // Consider placing all printing code into a function for better readability and manipulation
-                std::cout << "Available scores: [";
-                for (int j = 0; j < 6; j++)
-                {
-                    if (assigned[j]) continue;
-
-                    std::cout << s[j];
-
-                    if (j != 5)  // Don't print a comma and space for the last element
-                    {
-                        for (int k = j + 1; k < 6; k++)  // If all remaining indices are assigned, current index is last
-                        {
-                            if (!assigned[k])
-                            {
-                                std::cout << ", ";
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                std::cout << "]" << std::endl;
-            }  // end of first_time_asking block
+            if (!first_time_asking)
+            {
+                std::cout << scores_left.str() << std::endl;
+            }
+            first_time_asking = false;
 
             // Get int from user using int_input from dice roller
+            // This input, num, indicates which value the user wants to assign to the prompted ability
             num = int_input(prompt);
-            for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 6; j++)
             {
                 // Check if num is an unassigned score
-                // If not, get another input
-                if (num == s[i] && !assigned[i])
+                // If not, loop for another input
+                if (num == rs[j] && !assigned[j])
                 {
-                    assigned[i] = true;
+                    assigned[j] = true;
                     a_count += 1;
                     keep_going = false;
                     break;
@@ -123,7 +127,6 @@ void assign_abilities(abilities* ab) {
             }
         }
 
-        first_time_asking = false;
         ab->set_ability_score(ab_name, num);
     }
 }

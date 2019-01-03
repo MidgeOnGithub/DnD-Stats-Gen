@@ -8,11 +8,12 @@
 
 int main() {
 
+    // Introductory message
     std::cout << std::endl << "Welcome to the command-line DnD Stats Generator!" << std::endl
               << "========================================" << std::endl << std::endl;
 
     // Instantiate abilities class
-    abilities* ab = new abilities();
+    auto * ab = new abilities();
 
     // Determine if the user would like to generate scores by 3d6, 4d6, or pooling method.
     bool good_input = false;
@@ -46,7 +47,7 @@ int main() {
 
     // Print a summary of the final results
     std::string full_summary = ab->print_ability_summary();
-    std::cout << full_summary;
+    std::cout << full_summary << std::endl;
 
     // Offer to write out full_summary to a file.
     std::cout << "Would you like to save a character summary to a text file? (y/n): ";
@@ -61,7 +62,7 @@ int main() {
         std::string f_name;
         while (f_name.empty())
         {
-            std::cout << "What should be file be named? (\".txt\" will be appended): ";
+            std::cout << "What should the file be named? (\".txt\" will be appended): ";
             getline(std::cin, f_name);
         }
 
@@ -82,8 +83,9 @@ int main() {
     // Delete class instances to free memory
     delete ab;
 
-    // Close the program with an exit message
+    // Give exit message and close
     std::cout << std::endl << "========================================" << std::endl
               << "Thanks for using the DnD Stats Generator!" << std::endl;
+
     return 0;
 }
