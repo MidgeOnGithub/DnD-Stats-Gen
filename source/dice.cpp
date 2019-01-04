@@ -5,7 +5,7 @@
 #include <sstream>
 #include <random>
 
-#include "dice.h"
+#include "dice.hpp"
 
 int roll_dice(int dice_count, int die_sides, bool verbose, bool slow, int wait)  {
 

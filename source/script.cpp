@@ -3,9 +3,9 @@
 #include <iostream>
 #include <sstream>
 
-#include "abilities.h"
-#include "dice.h"
-#include "script.h"
+#include "abilities.hpp"
+#include "dice.hpp"
+#include "script.hpp"
 
 void generate_3d6(abilities* ab) {
 

@@ -1,10 +1,11 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
-#include "abilities.h"
-#include "dice.h"
-#include "script.h"
+#include "abilities.hpp"
+#include "dice.hpp"
+#include "script.hpp"
 
 int main() {
 
@@ -22,7 +23,7 @@ int main() {
         std::cout << "Would you like to perform a \"classic\" 3d6 ability score generation?" << std::endl
                   << "Or would you prefer a 4d6 with the lowest roll dropped? (3d6/4d6): ";
         std::string confirm;
-        getline(std::cin, confirm);
+        std::getline(std::cin, confirm);
         if (confirm == "3" || confirm == "3d6")
         {
             std::cout << std::endl;
