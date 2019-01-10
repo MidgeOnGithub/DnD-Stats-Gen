@@ -1,35 +1,38 @@
 
-#include <chrono>
-#include <thread>
 #include <iostream>
 #include <sstream>
-#include <random>
+#include <boost/chrono.hpp>
+#include <boost/thread.hpp>
+#include <boost/random.hpp>
+#include <boost/random/random_device.hpp>
+
 
 #include "dice.hpp"
 
-int roll_dice(int dice_count, int die_sides, bool verbose, bool slow, int wait)  {
+int roll_dice(int d_count, int d_sides, bool verbose, bool slow, int wait)  {
 
     // Figure out how many of n-sided die shall be rolled
-    if (dice_count < 1)
+    if (d_count < 1)
     {
-        dice_count = int_input("Enter the amount of dice to be rolled: ");
+        d_count = int_input("Enter the amount of dice to be rolled: ");
     }
-    if (die_sides < 1)
+    if (d_sides < 1)
     {
-        die_sides = int_input("Now enter how many sides each die has: ");
+        d_sides = int_input("Now enter how many sides each die has: ");
     }
 
-    // Perform and return a pseudo-random roll
-    static std::random_device rand;
-    static std::default_random_engine roller(rand());
-    static std::uniform_int_distribution<int> faces(1, die_sides);
+    // Perform and return the roll(s)
+    boost::random::random_device dice;
+    boost::random::uniform_int_distribution<int> faces(1, d_sides);
+    boost::function<int()> roll = boost::bind(faces, boost::ref(dice));
 
-    int roll = 0;
-    int landing;
-    for (int i = 1; i <= dice_count; i++)
+    int r_total = 0;
+    int landing = 0;
+    for (int i = 1; i <= d_count; i++)
     {
-        landing = faces(roller);  // Adding 1 allows [1 - die_sides] instead of [0 - (die_sides - 1)]
-        roll += landing;
+        // Adding 1 allows [1 - d_sides] instead of [0 - (d_sides - 1)]
+        landing = roll();
+        r_total += landing;
 
         if (verbose)
         {
@@ -37,13 +40,13 @@ int roll_dice(int dice_count, int die_sides, bool verbose, bool slow, int wait) 
 
             if (slow)
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(wait));  // Stop for a period of milliseconds
+                boost::this_thread::sleep_for(boost::chrono::milliseconds(wait));  // Stop for a period of milliseconds
             }
         }
 
     }
 
-    return roll;
+    return r_total;
 }
 
 int int_input(std::string initial_prompt) {

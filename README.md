@@ -10,7 +10,7 @@ This program is not intended to represent an official *Dungeons and Dragons* nor
 * Engaging in the fantasy adventure, each player acts as a `Player Character` (`PC`)
 
 ### Dice Roller
-This command-line program includes a dice roller which performs (pseudo-)random dice rolls of any "ndm" type. 
+This command-line program includes a dice roller which performs random dice rolls of any "ndm" type. 
 > * **n** is the number of die to be rolled
 > * **d** is a non-functional shorthand ("**d**ice"), spoken as just the letter 
 > * **m** represents each dice's face count
