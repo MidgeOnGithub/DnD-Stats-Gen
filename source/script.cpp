@@ -9,11 +9,14 @@
 
 void generate_3d6(abilities* ab) {
 
+    // Iterating from 0 - 5 because there are 6 abilities
     for (int i = 0; i < 6; i++)
     {
-        int roll = roll_dice(3, 6, false, false);
+        // Roll a 3d6, add result to rolled_score array
+        int roll = roll_die(3, 6, false, false);
         ab->set_rolled_score(i, roll);
-        std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
+        // Describe the score value (index + 1 for natural counting)
+        std::cout << "Roll " << i + 1 << " = " << roll << std::endl;
     }
 }
 
@@ -21,23 +24,23 @@ void generate_4d6_drop(abilities* ab) {
 
     for (int i = 0; i < 6; i++)
     {
-
         // Populate an array of 4 rolls
         int rolls[4];
         for (int &r : rolls)
         {
-            r = roll_dice(1, 6, false, false);
+            r = roll_die(1, 6, false, false);
         }
+        // Sort by increasing value
+        std::sort(std::begin(rolls), std::end(rolls));
 
-        // Sum only the 3 highest rolls
-        std::sort(std::begin(rolls), std::end(rolls));  // Sort by increasing value
+        // Sum over the three highest values
         int rolled_score = 0;
-        for (int r = 1; r < 4; r++)  // Access the three highest values
+        for (int r = 1; r < 4; r++)
         {
             rolled_score += rolls[r];
         }
 
-        // Place sum into given class, display roll result
+        // Assign and display roll result
         ab->set_rolled_score(i, rolled_score);
         std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
     }
@@ -52,15 +55,16 @@ void assign_abilities(abilities* ab) {
         rs[i] = ab->get_rolled_score(i);
     }
 
-    // Create an array and helper int which specify which scores have been assigned
+    // Create array and helper int which specify which scores have been assigned
     bool assigned[6] = {false, false, false, false, false, false};
     int a_count = 0;
-    // Control variable to determine if available scores should be displayed
+    // Create retry_prompt to use for int_input
+    std::string retry_prompt = "Score: ";
+    // Flag to determine if available scores should be displayed
     bool first_time_asking = true;
 
     for (int i = 0; i < 6; i++)
     {
-
         // Initialize control variables
         int num = 0;
         bool keep_going = true;
@@ -71,7 +75,10 @@ void assign_abilities(abilities* ab) {
         {
             for (int j = 0; j < 6; j++)
             {
-                if (!assigned[j]) num = rs[j];
+                if (!assigned[j])
+                {
+                    num = rs[j];
+                }
             }
             ab->set_ability_score(ab_name, num);
             break;
@@ -100,7 +107,7 @@ void assign_abilities(abilities* ab) {
         }
         scores_left << "]";
 
-        // Create the prompt to use for int_input
+        // Create prompt specific to current ability
         std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
         while (keep_going)
         {
@@ -110,20 +117,36 @@ void assign_abilities(abilities* ab) {
             }
             first_time_asking = false;
 
-            // Get int from user using int_input from dice roller
-            // This input, num, indicates which value the user wants to assign to the prompted ability
-            num = int_input(prompt);
+            /* Get an int, num, from user using int_input from dice module
+             * num indicates which value the user wants to assign to the prompted ability */
+            num = int_input(prompt, retry_prompt);
             for (int j = 0; j < 6; j++)
             {
-                // Check if num is an unassigned score
-                // If not, loop for another input
+                /* Check if num is an unassigned score
+                 * If not, loop for another input */
                 if (num == rs[j] && !assigned[j])
                 {
                     assigned[j] = true;
                     a_count += 1;
                     keep_going = false;
-                    break;
+                    break;  // Only breaks from for loop
                 }
+            }
+
+            if (keep_going)
+            {
+                std::string msg;
+                if (num > 18)
+                {
+                    msg = "You wish!";
+                } else if (num < 3)
+                {
+                    msg = "That's a bit harsh!";
+                } else
+                {
+                    msg = "That wasn't an available score!";
+                }
+                std::cout << msg << std::endl;
             }
         }
 
