@@ -107,7 +107,7 @@ std::string abilities::print_ability_summary() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
-    summary << "Assigned ability scores:" << std::endl
+    summary << "Final Ability Scores" << std::endl
             << "--------------------" << std::endl;
     for (int i = 0; i < 6; i++)
     {

@@ -10,13 +10,13 @@
 #include "dice_roller/dice.hpp"
 #include "dice_roller/dnd_die.hpp"
 
-void generate_3d6(abilities* ab) {
+void generate_3d6(abilities* ab, bool verbose, bool slow, int wait_time) {
 
     // Iterating from 0 - 5 because there are 6 abilities
     for (int i = 0; i < 6; i++)
     {
         // Roll a 3d6, add result to rolled_score array
-        int roll = dnd_roll(3, 6, false, false);
+        int roll = dnd_roll(3, 6, verbose, slow, wait_time);
         ab->set_rolled_score(i, roll);
         // Describe the score value (index + 1 for natural counting)
         std::cout << "Roll " << i + 1 << " = "
@@ -24,7 +24,7 @@ void generate_3d6(abilities* ab) {
     }
 }
 
-void generate_4d6_drop(abilities* ab) {
+void generate_4d6(abilities *ab, bool verbose, bool slow, int wait_time) {
 
     for (int i = 0; i < 6; i++)
     {
@@ -32,8 +32,13 @@ void generate_4d6_drop(abilities* ab) {
         int rolls[4];
         for (int &r : rolls)
         {
-            r = dnd_roll(1, 6, false, false);
+            r = dnd_roll(1, 6, verbose, slow, wait_time);
+            if (verbose)
+            {
+                dice_roller::verbosity(&r - &rolls[0], r, slow, wait_time);
+            }
         }
+
         // Sort by increasing value
         std::sort(std::begin(rolls), std::end(rolls));
 
