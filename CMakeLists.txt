@@ -6,3 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(Stats_Gen_Lib "")
 add_subdirectory(source)
+
+# Place output files outside of source folder
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

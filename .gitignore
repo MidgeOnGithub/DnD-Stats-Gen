@@ -6,3 +6,4 @@
 # CMake and build files
 compile/
 bin/
+lib/

@@ -6,9 +6,9 @@
 #include <string>
 
 #include "abilities.hpp"
-#include "dice.hpp"
-#include "dnd_die.hpp"
-#include "script.hpp"
+#include "abilities_script.hpp"
+#include "dice_roller/dice.hpp"
+#include "dice_roller/dnd_die.hpp"
 
 void generate_3d6(abilities* ab) {
 

@@ -16,16 +16,15 @@
 int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt) {
 
     int num;
-    bool prompt_flag = false;
 
     // Set a generic retry prompt if one was not given
     if (retry_prompt.empty())
         retry_prompt = "Number: ";
     // If the user provided an initial prompt, display, else give the retry prompt
     if (initial_prompt.empty())
-        std::cout << retry_prompt << std::endl;
+        std::cout << retry_prompt;
     else
-        std::cout << initial_prompt << std::endl;
+        std::cout << initial_prompt;
     // Loop user prompts until they get it right
     while (true)
     {
@@ -40,7 +39,7 @@ int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
          * This can be bypassed by someone clever enough */
         std::cout << "Invalid input -- try again!" << std::endl;
         // Ensure user is re-prompted
-        std::cout << retry_prompt << std::endl;
+        std::cout << retry_prompt;
     }
     std::cout << std::endl;
 

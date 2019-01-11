@@ -1,17 +1,13 @@
 add_executable(DND_Stats_Gen main.cpp)
-# Place output files outside of source folder
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+
+add_subdirectory(dice_roller)
 
 target_sources(Stats_Gen_Lib
     PRIVATE
         abilities.cpp
         abilities.hpp
-        dice.cpp
-        dice.hpp
-        dnd_die.cpp
-        dnd_die.hpp
-        script.cpp
-        script.hpp
+        abilities_script.cpp
+        abilities_script.hpp
 )
 
 # Need to build symbols/references needed from Boost sub-package
@@ -22,5 +18,3 @@ find_package(Boost REQUIRED COMPONENTS chrono random thread)
 
 # Link executable to source and Boost libraries
 target_link_libraries(DND_Stats_Gen Stats_Gen_Lib ${Boost_LIBRARIES})
-
-

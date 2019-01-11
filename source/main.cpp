@@ -5,8 +5,8 @@
 #include <string>
 
 #include "abilities.hpp"
-#include "dice.hpp"
-#include "script.hpp"
+#include "abilities_script.hpp"
+#include "dice_roller/dice.hpp"
 
 int main() {
 
