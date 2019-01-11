@@ -8,6 +8,7 @@ This program is not intended to represent an official *Dungeons and Dragons* nor
 * The game referenced: `Dungeons and Dragons` (`DnD`)
 * Players have adventures/sessions created/led/guided by a `Dungeon Master` (`DM`)
 * Engaging in the fantasy adventure, each player acts as a `Player Character` (`PC`)
+* The primary reference literature for DnD standards is the `Player's Handbook` (`PHB`)
 
 ### Dice Roller
 This command-line program includes a dice roller which performs random dice rolls of any "ndm" type. 
@@ -15,8 +16,10 @@ This command-line program includes a dice roller which performs random dice roll
 > * **d** is a non-functional shorthand ("**d**ice"), spoken as just the letter 
 > * **m** represents each dice's face count
 
-##### Future Development Notes
-Eventually, this part of the program will be expanded to account for "special" die and rolls (relative to DnD). Take, for example, the "faux" d100 roll, wherein the results of percentile and d10 die rolls are combined such that the range of outputs is 1 - 100, mimicking a 100-sided dice. (There are a variety of reasons why this method might be preferred.) Even disregarding the faux d100 method, the dice roller should account for percentile `(00, 10, 20, ... 90)` dice; it should also properly display the face values of a d10 as `0 - 9`, not `1 - 10`.
+This also accounts for special die and roll cases discussed in the PHB in pages 6 and 7, namely:
+> * **d100**, involving a combination of a percentile and d10 die
+> * **d3**, the first method described, wherein the value is the ceiling of a d6 / 2
+> * **d2**, wherein odd := 1, even := 2
 
 ### Ability Score Generation
 Dungeons and Dragons characters have 6 point-valued *abilities*:
@@ -30,12 +33,14 @@ When creating a new character, a player (or their DM) must determine what point 
 After score generation, the program interacts with you to assign the rolled scores to a PC's abilities. Afterwards, a pretty-printed summary of the abilities will be shown.
 
 ##### Future Development Notes
-Assigned ability scores will eventually be affected by PC `race` chosen upon character creation. Support for 2 or more races may or may not be provided.
+Assigned ability scores will eventually be affected by PC `race` chosen upon character creation. Support for 2 or more races will likely not be provided.
 > `Human` PCs receive +1 for all abilities, `Dwarf` PCs get +2 for *Constitution* only, etc.
+
+Also, the "point buy" method described in the PHB will be implemented.
 
 ### Saving Work
 After a user completes their ability assignment, the program offers to write out a summary to a `.txt` file: if you accept, the program prompts you to name the file.
 > Note: the file will likely save to the current working directory, but depending on OS and other factors, may save to the program's "binary" directory.
 
 ### Note to DnD Players & DMs
-All features of the program are/will be based on the latest edition of "Dungeons and Dragons" and its *Wizards of the Coast* expansions. The `master` branch of this repo will not attempt to account for older editions nor include third-party expansions. If the program ever appears to have erroneously done so, please report discrepancies.
+All features of the program are/will be based on the latest edition of "Dungeons and Dragons" and its *Wizards of the Coast* expansions. The `master` branch of this repo will not attempt to account for older editions nor include third-party expansions. If the program ever appears to have erroneously done so, or has failed to account for official content, please report discrepancies.

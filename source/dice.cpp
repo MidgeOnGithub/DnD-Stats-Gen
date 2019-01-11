@@ -13,30 +13,60 @@
 
 #include "dice.hpp"
 
-int roll_die(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
+int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt) {
+
+    int num;
+    bool prompt_flag = false;
+
+    // Set a generic retry prompt if one was not given
+    if (retry_prompt.empty())
+        retry_prompt = "Number: ";
+    // If the user provided an initial prompt, display, else give the retry prompt
+    if (initial_prompt.empty())
+        std::cout << retry_prompt << std::endl;
+    else
+        std::cout << initial_prompt << std::endl;
+    // Loop user prompts until they get it right
+    while (true)
+    {
+        // Attemot user input
+        std::string input;
+        getline(std::cin, input);
+        std::stringstream check_stream(input);
+        if (check_stream >> num && num > 0)
+            break;  // Accept if it's an int > 0
+        /* Omission of std::endl between retry_prompt and fail message:
+         * Assumes user uses "Enter" aka "carriage return" to end input
+         * This can be bypassed by someone clever enough */
+        std::cout << "Invalid input -- try again!" << std::endl;
+        // Ensure user is re-prompted
+        std::cout << retry_prompt << std::endl;
+    }
+    std::cout << std::endl;
+
+    return num;
+}
+
+int dice_roller::roll_die(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
+
+    // Ensure wait_time works "as intended"
+    if (wait_time < 1)
+    {
+        std::cout << "WARNING -- Given wait time was invalid. Reverting to default." << std::endl;
+        wait_time = 750;
+    }
 
     /* If not given in function call:
      * Determine how many n-sided die to roll by input */
     if (num_die < 1)
-    {
-        num_die = int_input("Enter the amount of dice to be rolled: ");
-    }
+        num_die = dice_roller::int_input("Enter the amount of dice to be rolled: ", "Die count: ");
     if (num_sides < 1)
-    {
-        num_sides = int_input("Now enter how many sides each die has: ");
-    }
-
-    // Prevent a mischievous user from breaking things
-    if (wait_time < 1)
-    {
-        std::cout << "Given wait time was invalid -- reverting to default." << std::endl;
-    }
-
+        num_sides = dice_roller::int_input("Now enter how many sides each die has: ", "Dice sides: ");
     // Create a generator based on OS-specific non-deterministic RNG
     boost::random::random_device dice;
-    // Restrict outputs to a uniform int distribution based on the die
+    // Restrict outputs to a uniform int distribution based on the dice
     boost::random::uniform_int_distribution<int> faces(1, num_sides);
-    // Combine the generator and range into a simply-callable RNG
+    // Combine the device and distribution into a simply-callable RNG
     boost::function<int()> roll = boost::bind(faces, boost::ref(dice));
 
     int landing = 0;  // The value of a single dice roll
@@ -47,66 +77,21 @@ int roll_die(int num_die, int num_sides, bool verbose, bool slow, int wait_time)
     {
         // Roll the die one at a time
         landing = roll();
-
-        // Say each individual roll and pause between if desired
-        if (verbose)
-        {
-            std::cout << "Die " << i << ": " << landing << std::endl;
-            if (slow)
-            {
-                boost::this_thread::sleep_for(boost::chrono::milliseconds(wait_time));
-            }
-        }
-
+        // Say each individual roll, pause between if desired
+        if (verbose && num_die > 1)
+            dice_roller::verbosity(i, landing, slow, wait_time);
+        // Add the roll value to sum; continue
         roll_sum += landing;
     }
-
+    // Return the total ndm roll value
     return roll_sum;
 }
 
+void dice_roller::verbosity(int which_dice, int landing, bool slow, int wait_time) {
 
-int int_input(std::string initial_prompt, std::string retry_prompt) {
-
-    int num;
-    bool prompt_flag = false;
-
-    if (retry_prompt.empty())
-    {
-        retry_prompt = "Number: ";
-    }
-
-    // If the user provided an initial prompt, display, else give the generic one
-    if (initial_prompt.empty())
-    {
-        prompt_flag = true;
-    } else
-    {
-        std::cout << initial_prompt;
-    }
-
-    // Loop user prompt until they get it right
-    while (true)
-    {
-        if (prompt_flag)
-        {
-            std::cout << retry_prompt;
-        }
-
-        std::string input;
-        getline(std::cin, input);
-        std::stringstream check_stream(input);
-        if (check_stream >> num && num > 0)
-        {
-            break;  // Accept if it's an int > 0
-        }
-
-        /* Omission of std::endl between retry_prompt and fail message:
-         * Assumes user uses "Enter" aka "carriage return" to end input
-         * This can be bypassed by someone clever enough */
-        std::cout << "Invalid input -- try again!" << std::endl;
-        prompt_flag = true;  // Ensure user is re-prompted
-    }
-    std::cout << std::endl;
-
-    return num;
+    // Be verbose
+    std::cout << "Dice " << which_dice << ": " << landing << std::endl;
+    // Pause if desired
+    if (slow)
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(wait_time));
 }

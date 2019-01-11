@@ -1,10 +1,13 @@
 
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include "abilities.hpp"
 #include "dice.hpp"
+#include "dnd_die.hpp"
 #include "script.hpp"
 
 void generate_3d6(abilities* ab) {
@@ -13,10 +16,11 @@ void generate_3d6(abilities* ab) {
     for (int i = 0; i < 6; i++)
     {
         // Roll a 3d6, add result to rolled_score array
-        int roll = roll_die(3, 6, false, false);
+        int roll = dnd_roll(3, 6, false, false);
         ab->set_rolled_score(i, roll);
         // Describe the score value (index + 1 for natural counting)
-        std::cout << "Roll " << i + 1 << " = " << roll << std::endl;
+        std::cout << "Roll " << i + 1 << " = "
+                  << std::setw(2) << roll << std::endl;
     }
 }
 
@@ -28,7 +32,7 @@ void generate_4d6_drop(abilities* ab) {
         int rolls[4];
         for (int &r : rolls)
         {
-            r = roll_die(1, 6, false, false);
+            r = dnd_roll(1, 6, false, false);
         }
         // Sort by increasing value
         std::sort(std::begin(rolls), std::end(rolls));
@@ -42,7 +46,8 @@ void generate_4d6_drop(abilities* ab) {
 
         // Assign and display roll result
         ab->set_rolled_score(i, rolled_score);
-        std::cout << "Roll " << i + 1 << " = " << ab->get_rolled_score(i) << std::endl;
+        std::cout << "Roll " << i + 1 << " = "
+                  << std::setw(2) << rolled_score << std::endl;
     }
 }
 
@@ -112,14 +117,13 @@ void assign_abilities(abilities* ab) {
         while (keep_going)
         {
             if (!first_time_asking)
-            {
                 std::cout << scores_left.str() << std::endl;
-            }
+            // Set to false to ensure the correct flag upon the second time asking
             first_time_asking = false;
 
             /* Get an int, num, from user using int_input from dice module
              * num indicates which value the user wants to assign to the prompted ability */
-            num = int_input(prompt, retry_prompt);
+            num = dice_roller::int_input(prompt, retry_prompt);
             for (int j = 0; j < 6; j++)
             {
                 /* Check if num is an unassigned score
@@ -133,19 +137,17 @@ void assign_abilities(abilities* ab) {
                 }
             }
 
+            // If the user puts in an impossible or unavailable value
             if (keep_going)
             {
                 std::string msg;
                 if (num > 18)
-                {
                     msg = "You wish!";
-                } else if (num < 3)
-                {
+                else if (num < 3)
                     msg = "That's a bit harsh!";
-                } else
-                {
+                else
                     msg = "That wasn't an available score!";
-                }
+                // Print decided message to the user
                 std::cout << msg << std::endl;
             }
         }

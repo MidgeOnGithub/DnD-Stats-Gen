@@ -1,6 +1,6 @@
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 
 #include "abilities.hpp"
@@ -113,7 +113,7 @@ std::string abilities::print_ability_summary() {
     {
         std::string ab_name = get_ability_name(i);
         summary << std::setw(18) << std::left << ab_name + ": "
-                << std::setw(2) << std::right << score_dict[ab_name] << std::endl;
+                << std::setw(02) << std::right << score_dict[ab_name] << std::endl;
     }
     summary << "--------------------" << std::endl;
 
