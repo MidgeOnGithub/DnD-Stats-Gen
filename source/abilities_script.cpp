@@ -6,25 +6,24 @@
 #include <string>
 
 #include "abilities.hpp"
-#include "abilities_script.hpp"
 #include "dice_roller/dice.hpp"
 #include "dice_roller/dnd_die.hpp"
 
-void generate_3d6(abilities* ab, bool verbose, bool slow, int wait_time) {
+void generate_3d6(abilities &ab, bool verbose, bool slow, int wait_time) {
 
     // Iterating from 0 - 5 because there are 6 abilities
     for (int i = 0; i < 6; i++)
     {
         // Roll a 3d6, add result to rolled_score array
         int roll = dnd_roll(3, 6, verbose, slow, wait_time);
-        ab->set_rolled_score(i, roll);
+        ab.rolled_scores[i] = roll;
         // Describe the score value (index + 1 for natural counting)
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << roll << std::endl;
     }
 }
 
-void generate_4d6(abilities *ab, bool verbose, bool slow, int wait_time) {
+void generate_4d6(abilities &ab, bool verbose, bool slow, int wait_time) {
 
     for (int i = 0; i < 6; i++)
     {
@@ -50,19 +49,19 @@ void generate_4d6(abilities *ab, bool verbose, bool slow, int wait_time) {
         }
 
         // Assign and display roll result
-        ab->set_rolled_score(i, rolled_score);
+        ab.rolled_scores[i] = rolled_score;
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << rolled_score << std::endl;
     }
 }
 
-void assign_abilities(abilities* ab) {
+void assign_abilities(abilities &ab) {
 
     // Create a copy of ab's scores array (prevent class calls and modification)
     int rs[6];  // rs = rolled scores
     for (int i = 0; i < 6; i++)
     {
-        rs[i] = ab->get_rolled_score(i);
+        rs[i] = ab.rolled_scores[i];
     }
 
     // Create array and helper int which specify which scores have been assigned
@@ -78,7 +77,7 @@ void assign_abilities(abilities* ab) {
         // Initialize control variables
         int num = 0;
         bool keep_going = true;
-        std::string ab_name = ab->get_ability_name(i);
+        std::string ab_name = ab.names[i];
 
         // If only one value remains, auto-assign it to the last ability
         if (a_count == 5)
@@ -90,7 +89,7 @@ void assign_abilities(abilities* ab) {
                     num = rs[j];
                 }
             }
-            ab->set_ability_score(ab_name, num);
+            ab.score_dict[ab_name] = num;
             break;
         }
 
@@ -157,6 +156,6 @@ void assign_abilities(abilities* ab) {
             }
         }
 
-        ab->set_ability_score(ab_name, num);
+        ab.score_dict[ab_name] = num;
     }
 }

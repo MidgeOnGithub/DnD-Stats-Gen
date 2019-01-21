@@ -2,6 +2,7 @@
 .idea/
 .vscode/
 .vs/
+CMakeSettings.json
 
 # CMake and build files
 compile/

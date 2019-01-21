@@ -7,11 +7,11 @@
 namespace po = boost::program_options;
 
 #include "abilities.hpp"
-#include "abilities_script.hpp"
 #include "dice_roller/dice.hpp"
 
 bool process_command_line(int argc, const char *argv[],
-                          bool& verbose, bool& slow, int& wait_time, std::string& f_name, bool& ephemeral);
+                          bool& verbose, bool& slow, int& wait_time,
+						  std::string& f_name, bool& ephemeral);
 
 void file_output(std::string file_name, std::string output_text);
 
@@ -24,15 +24,18 @@ int main(int argc, const char *argv[]) {
     std::string f_name;  // To be left blank if not given
     bool ephemeral = false;
 
-    if (!process_command_line(argc, argv, verbose, slow, wait_time, f_name, ephemeral))
-        return 1;
+	if (!process_command_line(argc, argv, verbose, slow, wait_time,
+							  f_name, ephemeral))
+	{
+		return 1;
+	}
 
     // Introductory message
     std::cout << std::endl << "Welcome to the DnD Stats Generator!" << std::endl
               << "========================================" << std::endl << std::endl;
 
     // Instantiate abilities class
-    auto* ab = new abilities();
+    auto ab = new abilities();
 
     // TODO Move part or all of the method-choice code to another function
     // Determine how the user wants to generate ability scores.
@@ -44,7 +47,7 @@ int main(int argc, const char *argv[]) {
         if (countdown == 0)
         {
             std::cout << "Failed to get input after three tries -- aborting program." << std::endl;
-            exit(1);
+            exit(2);
         }
 
         // Prompt the user and check their response
@@ -60,12 +63,12 @@ int main(int argc, const char *argv[]) {
         if (confirm == "1")
         {
             std::cout << std::endl << "Chosen method: 4d6" << std::endl;
-            generate_4d6(ab, verbose, slow, wait_time);
+            generate_4d6(*ab, verbose, slow, wait_time);
             good_input = true;
         } else if (confirm == "2")
         {
             std::cout << std::endl << "Chosen method: 3d6" << std::endl;
-            generate_3d6(ab, verbose, slow, wait_time);
+            generate_3d6(*ab, verbose, slow, wait_time);
             good_input = true;
         } else if (confirm == "3")
         {
@@ -83,7 +86,7 @@ int main(int argc, const char *argv[]) {
     std::cout << std::endl << "Rolled scores: " << ab->print_rolled_scores() << std::endl;
 
     // Interface with user to assign scores to abilities
-    assign_abilities(ab);
+    assign_abilities(*ab);
 
     // Print a summary of the final results
     std::string full_summary = ab->print_ability_summary();

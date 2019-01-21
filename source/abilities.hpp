@@ -6,6 +6,10 @@
 
 class abilities {
 
+    friend void generate_3d6(abilities &ab, bool verbose = false, bool slow = false, int wait_time = 750);
+    friend void generate_4d6(abilities &ab, bool verbose = false, bool slow = false, int wait_time = 750);
+    friend void assign_abilities(abilities &ab);
+
 public:
 
     abilities();  // Constructor
@@ -31,8 +35,8 @@ private:
     int rolled_scores[6] = {0, 0, 0, 0, 0, 0};  // Stores rolled score values
 
     // List ability names by order on official character creation sheet
-    std::string names[6] = {"Strength", "Dexterity", "Constitution",
-                             "Intelligence", "Wisdom", "Charisma"};
+    const std::string names[6] = {"Strength", "Dexterity", "Constitution",
+                                  "Intelligence", "Wisdom", "Charisma"};
 
     std::map<std::string, int> score_dict; // Dictionary mapping ability names to "acting" score
 

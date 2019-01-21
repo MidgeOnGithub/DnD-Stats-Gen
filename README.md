@@ -30,13 +30,12 @@ Use `--help` to see the following screen:
 >                              
 > * -s [ --slow ] arg (=350)
 >
-> An optional value (milliseconds) to set a timer between die rolls. Depends on `verbose` and `no-slow`. Do not chain with other options.
+> An optional value (milliseconds) to set a timer between die rolls. Depends on `verbose` and `no-slow`.
 >                              
 > * -o [ --output-file-name ] arg
 >
 > Parameter to output a summary to `file_name`.txt (extension will be appended by 
-> the program) to the working directory. Do not 
-> chain with other options.
+> the program) to the working directory.
 >                              
 > * --no-output
 >
