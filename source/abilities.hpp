@@ -1,6 +1,6 @@
 
-#ifndef DND_STATS_GEN_ABILITIES_H
-#define DND_STATS_GEN_ABILITIES_H
+#ifndef DND_ABILITIES_HPP
+#define DND_ABILITIES_HPP
 
 #include <map>
 
@@ -42,4 +42,4 @@ private:
 
 };
 
-#endif //DND_STATS_GEN_ABILITIES_H
+#endif //DND_ABILITIES_HPP
