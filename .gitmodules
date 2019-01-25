@@ -1,3 +1,6 @@
 [submodule "vendor/boost-cmake"]
 	path = vendor/boost-cmake
 	url = https://github.com/Orphis/boost-cmake.git
+[submodule "data"]
+	path = data
+	url = https://github.com/MidgeOnGithub/DnD-Data.git

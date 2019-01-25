@@ -1,11 +1,10 @@
-
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 
 #include "abilities.hpp"
 
-abilities::abilities() {
+Abilities::Abilities() {
 
     for (int i = 0; i < 6; i++)
     {
@@ -13,7 +12,7 @@ abilities::abilities() {
     }
 }
 
-int abilities::get_ability_score(std::string name) {
+int Abilities::get_ability_score(std::string name) {
 
     if (score_dict.find(name) == score_dict.end())
     {
@@ -23,7 +22,7 @@ int abilities::get_ability_score(std::string name) {
     return score_dict[name];
 }
 
-void abilities::set_ability_score(std::string name, int score) {
+void Abilities::set_ability_score(std::string name, int score) {
 
     if (score_dict.find(name) == score_dict.end())
     {
@@ -33,7 +32,7 @@ void abilities::set_ability_score(std::string name, int score) {
     score_dict[name] = score;
 }
 
-std::string abilities::print_ability_scores() {
+std::string Abilities::print_ability_scores() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream scores;
@@ -53,7 +52,7 @@ std::string abilities::print_ability_scores() {
     return scores.str();
 }
 
-int abilities::get_rolled_score(int i) {
+int Abilities::get_rolled_score(int i) {
 
     if (i > 5)
     {
@@ -63,7 +62,7 @@ int abilities::get_rolled_score(int i) {
     return rolled_scores[i];
 }
 
-void abilities::set_rolled_score(int i, int score) {
+void Abilities::set_rolled_score(int i, int score) {
 
     if (i > 5)
     {
@@ -73,7 +72,7 @@ void abilities::set_rolled_score(int i, int score) {
     rolled_scores[i] = score;
 }
 
-std::string abilities::print_rolled_scores() {
+std::string Abilities::print_rolled_scores() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream scores;
@@ -93,7 +92,7 @@ std::string abilities::print_rolled_scores() {
     return scores.str();
 }
 
-std::string abilities::get_ability_name(int i) {
+std::string Abilities::get_ability_name(int i) {
 
     if (i > 5)
     {
@@ -103,7 +102,7 @@ std::string abilities::get_ability_name(int i) {
     return names[i];
 }
 
-std::string abilities::print_ability_summary() {
+std::string Abilities::print_ability_summary() {
 
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
@@ -121,7 +120,7 @@ std::string abilities::print_ability_summary() {
     return summary.str();
 }
 
-void abilities::index_error(int e_code) {
+void Abilities::index_error(int e_code) {
 
     switch(e_code)
     {
@@ -140,7 +139,7 @@ void abilities::index_error(int e_code) {
         case 5 : std::cout << "Index passed to get_name is out of range.";
                  exit(5);
 
-        default : std::cout << "Unknown index_error while running an abilities class method.";
+        default : std::cout << "Unknown index_error while running an Abilities class method.";
                   exit(9);
     }
 }

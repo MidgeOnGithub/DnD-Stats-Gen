@@ -1,4 +1,6 @@
-
+// Must include first due to pre-processors
+//#include <Python.h> // includes <stdio.h>, <string.h>, <errno.h>, and <stdlib.h>
+// TODO: Consider running ../data/utils/json_gen.py from `main` or just using pre-gen JSON
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -7,120 +9,68 @@
 namespace po = boost::program_options;
 
 #include "abilities.hpp"
+#include "character.hpp"
 #include "dice_roller/dice.hpp"
 
-bool process_command_line(int argc, const char *argv[],
-                          bool& verbose, bool& slow, int& wait_time,
-						  std::string& f_name, bool& ephemeral);
-
-void file_output(std::string file_name, std::string output_text);
-
-int main(int argc, const char *argv[]) {
-
-    // Declare variables affected by command-line arguments
-    bool verbose = false;
-    bool slow = false;
-    int wait_time;  // Value will be handled by parser
-    std::string f_name;  // To be left blank if not given
+struct Program_Args
+{
+    dice_roller::Options roll_options;
+    std::string f_name;  // Left blank if not given
     bool ephemeral = false;
+};
+bool parse_args(int argc, const char *argv[], Program_Args &args);
+bool should_file_be_written(Program_Args &args);
+void file_output(std::string file_name, std::string out_text);
 
-	if (!process_command_line(argc, argv, verbose, slow, wait_time,
-							  f_name, ephemeral))
-	{
-		return 1;
-	}
+int main(int argc, const char *argv[])
+{
+    Program_Args program_args;
+	if (!parse_args(argc, argv, program_args))
+        return 1;
 
     // Introductory message
     std::cout << std::endl << "Welcome to the DnD Stats Generator!" << std::endl
               << "========================================" << std::endl << std::endl;
+              
+    // Get the generated character's name
+    std::string character_name;
+    // Instantiate Character class
+    auto pc = Character();
 
-    // Instantiate abilities class
-    auto ab = new abilities();
-
-    // TODO Move part or all of the method-choice code to another function
-    // Determine how the user wants to generate ability scores.
-    bool good_input = false;
-    int countdown = 3;
-    while (!good_input)
+    // Generate ability scores based on user's method choice
+    int method;
+    method = pc.ab.method_choice();
+    switch(method)
     {
-        // Prevent infinite looping possibility
-        if (countdown == 0)
-        {
-            std::cout << "Failed to get input after three tries -- aborting program." << std::endl;
-            exit(2);
-        }
+        case 1: std::cout << std::endl << "Chosen method: 4d6" << std::endl;
+                pc.ab.generate_4d6(program_args.roll_options);
+                break;
 
-        // Prompt the user and check their response
-        std::cout << "What method should we use to generate ability scores?" << std::endl
-                  << "------------------" << std::endl
-                  << "|| 1: " << std::setw(12) << "4d6 ||" << std::endl
-                  << "|| 2: " << std::setw(12) << "3d6 ||" << std::endl
-                  << "|| 3: " << std::setw(12) << "Point-Buy ||" <<  "  <--  Unimplemented!!!" << std::endl
-                  << "------------------" << std::endl
-                  << "Choice: ";
-        std::string confirm;
-        std::getline(std::cin, confirm);
-        if (confirm == "1")
-        {
-            std::cout << std::endl << "Chosen method: 4d6" << std::endl;
-            generate_4d6(*ab, verbose, slow, wait_time);
-            good_input = true;
-        } else if (confirm == "2")
-        {
-            std::cout << std::endl << "Chosen method: 3d6" << std::endl;
-            generate_3d6(*ab, verbose, slow, wait_time);
-            good_input = true;
-        } else if (confirm == "3")
-        {
-            //std::cout << std::endl << "Chosen method: Point-Buy" << std::endl;
-            //point_buy(ab, verbose);
-            std::cout << "This doesn't work yet -- choose another option!" << std::endl;
-        } else
-        {
-            //good_input = false
-            std::cout << std::endl;
-            countdown--;
-        }
+        case 2: std::cout << std::endl << "Chosen method: 3d6" << std::endl;
+                pc.ab.generate_3d6(program_args.roll_options);
+                break;
+
+        case 3: // Option not implemented yet, method_choice prevents this return
+                //std::cout << std::endl << "Chosen method: Point-Buy" << std::endl;
+                //point_buy(ab, verbose);
+                break;
     }
-
-    std::cout << std::endl << "Rolled scores: " << ab->print_rolled_scores() << std::endl;
-
-    // Interface with user to assign scores to abilities
-    assign_abilities(*ab);
+    std::cout << std::endl << "Generated ability scores: " << pc.ab.print_rolled_scores() << std::endl;
+    // Interface with user to assign scores to character's abilities
+    pc.ab.assign_abilities();
 
     // Print a summary of the final results
-    std::string full_summary = ab->print_ability_summary();
+    std::string full_summary = pc.ab.print_ability_summary();
     std::cout << full_summary << std::endl;
 
-    /* Offer to write out full_summary to a file
-     * Don't run this code if user specified --no-output in command line
-     * Or if they've already given a file name */
-    bool write_to_file = false;
-    if (!ephemeral)
+    // Offer to output a summary (skip if user specified --no-output)
+    if (should_file_be_written(program_args))
     {
-        if (!f_name.empty())
-        {
-            write_to_file = true;
-        } else
-        {
-            std::cout << "Would you like to save a character summary to a text file? (y/n): ";
-            std::string confirm;
-            getline(std::cin, confirm);
-            // Get the first letter of confirm for comparison
-            std::string letter = confirm.substr(0, 1);
-            if (letter == "y" || letter == "Y")
-                write_to_file = true;
-        }
-    }
-
-    if (write_to_file)
-    {
-        file_output(f_name, full_summary);
-        std::cout << "Successfully wrote summary to `" << f_name << ".txt`!" << std::endl;
-    }
-
-    // Delete class instances to free memory
-    delete ab;
+        file_output(program_args.f_name, full_summary);
+        std::cout << "Successfully wrote summary to `" << program_args.f_name << ".txt`!" << std::endl;
+    } 
+    else
+        std::cout << "Per your instructions, no output was generated." << std::endl;
 
     // Give exit message and close
     std::cout << std::endl << "========================================" << std::endl
@@ -129,12 +79,11 @@ int main(int argc, const char *argv[]) {
     return 0;
 }
 
-/* This function is "dirty", having both side effects and a return value
- * It parses command line args and alter values given by reference
- * It also returns a bool to tell main if the program should continue */
-bool process_command_line(int argc, const char *argv[],
-                          bool& verbose, bool& slow, int& wait_time, std::string& f_name, bool& ephemeral) {
-
+/* "Dirty" function. Alters argments and returns a bool.
+ * Tries to parse and evalutate command line args as needed.
+ * The returned bool tells the caller if it should continue. */
+bool parse_args(int argc, const char *argv[], Program_Args &args) 
+{
     try
     {
         // Set command line argument info: names, descriptions, and types
@@ -171,30 +120,52 @@ bool process_command_line(int argc, const char *argv[],
          * As is, without slow being dependent on verbose, it would be impossible do this
          * Because `slow` would always be fired, obfuscating user's desire for verbosity */
         if (vm.count("verbose"))
-            verbose = true;
+            args.roll_options.verbose = true;
         if (!vm.count("no-slow"))
-            slow = true;
-        wait_time = vm["slow"].as<int>();
+            args.roll_options.slow = true;
+            args.roll_options.wait_time = vm["slow"].as<int>();
         if (vm.count("no-output"))
-            ephemeral = true;
+            args.ephemeral = true;
         if (vm.count("output-file-name")) {
-            f_name = vm["output-file-name"].as<std::string>();
+            args.f_name = vm["output-file-name"].as<std::string>();
         }
     }
         // If argument parsing or evaluating generates an error, state error and exit
-    catch (const po::error &ex) {
+    catch (const po::error &ex)
+    {
         std::cerr << "Argument Parse Error: " << ex.what() << std::endl;
         return false;
     }
-    catch (std::exception &ex) {
+    catch (std::exception &ex)
+    {
         std::cerr << ex.what()<< std::endl;
         return false;
     }
     return true;
 }
 
-void file_output(std::string file_name, std::string output_text) {
-    // Get a name for the file if not provided in a command-line argument
+/* Returns a bool telling main if it should write output to a file. */
+bool should_file_be_written(Program_Args &args)
+{
+    if (args.ephemeral)
+        return false;
+    if (!args.f_name.empty())
+        return true;
+    // If command arguments do not given a direct answer, ask user
+    std::cout << "Output a character summary to a text file? (y/n): ";
+    std::string confirm;
+    getline(std::cin, confirm);
+    // Get the first letter of confirm for comparison
+    std::string letter = confirm.substr(0, 1);
+    if (letter == "y" || letter == "Y")
+        return true;
+    return false;
+}
+
+/* Write out_text to a file named file_name.*/
+void file_output(std::string file_name, std::string out_text)
+{
+    // Get a name for the file if not provided
     if (file_name.empty())
     {
         while (file_name.empty())
@@ -203,13 +174,12 @@ void file_output(std::string file_name, std::string output_text) {
             getline(std::cin, file_name);
         }
     }
-
-    // Write full_summary to new file
+    // Write out_text to a new file
     std::ofstream file;
     if (file)
     {
         file.open(file_name + ".txt");
-        file << output_text;
+        file << out_text;
         file.close();
     } else
     {

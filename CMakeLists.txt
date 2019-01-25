@@ -19,6 +19,8 @@ target_sources(DnD-Stats-Gen
         source/abilities.cpp
         source/abilities.hpp
         source/abilities_script.cpp
+        source/character.cpp
+        source/character.hpp
         source/dice_roller/dice.cpp
         source/dice_roller/dice.hpp
         source/dice_roller/dnd_die.cpp

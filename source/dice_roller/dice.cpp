@@ -1,9 +1,7 @@
-
 /* Vocabulary:
  * RNG = Random Number Generator/Generation
  * "Dice" is the singular, "die" is the plural
 */
-
 #include <iostream>
 #include <sstream>
 #include <boost/chrono.hpp>
@@ -13,10 +11,9 @@
 
 #include "dice.hpp"
 
-int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt) {
-
+int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
+{
     int num;
-
     // Set a generic retry prompt if one was not given
     if (retry_prompt.empty())
         retry_prompt = "Number: ";
@@ -28,7 +25,7 @@ int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
     // Loop user prompts until they get it right
     while (true)
     {
-        // Attemot user input
+        // Attempt user input
         std::string input;
         getline(std::cin, input);
         std::stringstream check_stream(input);
@@ -42,19 +39,17 @@ int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
         std::cout << retry_prompt;
     }
     std::cout << std::endl;
-
     return num;
 }
 
-int dice_roller::roll_die(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int dice_roller::roll_die(int num_die, int num_sides, dice_roller::Options &options)
+{
     // Ensure wait_time works "as intended"
-    if (wait_time < 1)
+    if (options.wait_time < 1)
     {
         std::cout << "WARNING -- Given wait time was invalid. Reverting to default." << std::endl;
-        wait_time = 750;
+        options.wait_time = 750;
     }
-
     /* If not given in function call:
      * Determine how many n-sided die to roll by input */
     if (num_die < 1)
@@ -67,8 +62,8 @@ int dice_roller::roll_die(int num_die, int num_sides, bool verbose, bool slow, i
     boost::random::uniform_int_distribution<int> faces(1, num_sides);
     // Combine the device and distribution into a simply-callable RNG
     boost::function<int()> roll = boost::bind(faces, boost::ref(dice));
-
-    int landing = 0;  // The value of a single dice roll
+    // Now perform the rolls
+    int landing = 0;   // Single dice's value
     int roll_sum = 0;  // The sum of all die landings
     /* Starting iteration from 1 to allow natural counts:
      * [1 to num_sides] instead of [0 to (num_sides - 1)] */
@@ -77,8 +72,8 @@ int dice_roller::roll_die(int num_die, int num_sides, bool verbose, bool slow, i
         // Roll the die one at a time
         landing = roll();
         // Say each individual roll, pause between if desired
-        if (verbose && num_die > 1)
-            dice_roller::verbosity(i, landing, slow, wait_time);
+        if (options.verbose && num_die > 1)
+            dice_roller::verbosity(i, landing, options);
         // Add the roll value to sum; continue
         roll_sum += landing;
     }
@@ -86,11 +81,11 @@ int dice_roller::roll_die(int num_die, int num_sides, bool verbose, bool slow, i
     return roll_sum;
 }
 
-void dice_roller::verbosity(int which_dice, int landing, bool slow, int wait_time) {
-
+void dice_roller::verbosity(int which_dice, int landing, Options &options)
+{
     // Be verbose
     std::cout << "Dice " << which_dice << ": " << landing << std::endl;
     // Pause if desired
-    if (slow)
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(wait_time));
+    if (options.slow)
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(options.wait_time));
 }

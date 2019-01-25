@@ -1,9 +1,7 @@
-
 /* All code here is intended to act based on special die/roll cases
  * Described in the fifth edition "Player's Handbook" [PHB]
  * Pages 6 and 7
  * Nothing from the "Errata" publication applies */
-
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -11,8 +9,8 @@
 #include "dice.hpp"
 #include "dnd_die.hpp"
 
-int dnd_roll(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int dnd_roll(int num_die, int num_sides, dice_roller::Options &options)
+{
     /* Check against each special dice (relative to DnD)
      * Based on what kind of dice, call the correct function
      * The functions within this source file call dice_roller::roll_die
@@ -40,13 +38,14 @@ int dnd_roll(int num_die, int num_sides, bool verbose, bool slow, int wait_time)
     return roll_sum;
 }
 
-int d10_display(int d10_value) {
+int d10_display(int d10_value)
+{
     /* If the value is 10, the face value should be 0 */
     return (d10_value == 10) ? 0 : d10_value;
 }
 
-int d100_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int d100_roller(int num_die, int num_sides, dice_roller::Options &options)
+{
     /* Simulate a d100 by rolling a percentile and d10
      * The percentile dice loosely represents the tens place
      * The d10 is idiomatically implemented in this roll */
@@ -80,8 +79,8 @@ int d100_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_ti
     return roll_sum;
 }
 
-int d10_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int d10_roller(int num_die, int num_sides, dice_roller::Options &options)
+{
     /* Represent the 0 face properly in case it's printed
      * Although the values range from 1 to 10
      * Face values range from 0 to 9, where 0 := 10 */
@@ -100,8 +99,8 @@ int d10_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_tim
     return roll_sum;
 }
 
-int d3_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int d3_roller(int num_die, int num_sides, dice_roller::Options &options)
+{
     /* Per PHB, a d3 roll performance:
      * Roll a d6, divide by 2, round up */
     int roll_sum = 0;
@@ -126,11 +125,10 @@ int d3_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_time
     return roll_sum;
 }
 
-int d2_roller(int num_die, int num_sides, bool verbose, bool slow, int wait_time) {
-
+int d2_roller(int num_die, int num_sides, dice_roller::Options &options)
+{
     /* An even number := 2, odd number := 1
-     * d6 usage is arbitrary
-     * Any dice with even face count would work
+     * d6 usage is arbitrary, any dice with even face count would work
      * Also described in the PHB is an alternate method not used here
      * Instead of taking the ceiling of half the roll
      * Define the first half of dice values (1 to 3) as 1

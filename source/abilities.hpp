@@ -1,18 +1,22 @@
-
 #ifndef DND_ABILITIES_HPP
 #define DND_ABILITIES_HPP
 
 #include <map>
 
-class abilities {
+#include "dice_roller/dice.hpp"
 
-    friend void generate_3d6(abilities &ab, bool verbose = false, bool slow = false, int wait_time = 750);
-    friend void generate_4d6(abilities &ab, bool verbose = false, bool slow = false, int wait_time = 750);
-    friend void assign_abilities(abilities &ab);
+class Abilities {
 
 public:
 
-    abilities();  // Constructor
+    Abilities();
+
+    // Script functions
+    int method_choice();
+    void generate_3d6(dice_roller::Options &options);
+    void generate_4d6(dice_roller::Options &options);
+    void assign_abilities();
+    // End Script Functions
 
     int get_ability_score(std::string name);  // Returns score assigned to ability (name)
     void set_ability_score(std::string name, int score = 0);  // Sets ability (name) to score s

@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -9,21 +8,58 @@
 #include "dice_roller/dice.hpp"
 #include "dice_roller/dnd_die.hpp"
 
-void generate_3d6(abilities &ab, bool verbose, bool slow, int wait_time) {
+int Abilities::method_choice() {
+    
+    bool good_input = false;
+    int choice;
+    int countdown = 3;
+    while (!good_input)
+    {
+        // Prevent infinite looping possibility
+        if (countdown == 0)
+        {
+            std::cout << "Failed to get input after three tries -- aborting program." << std::endl;
+            exit(2);
+        }
+        // Prompt the user and check their response
+        // Use ostringstream as an easy way to format as if using std::cout
+        std::ostringstream prompt;
+        prompt << "What method should we use to generate ability scores?" << std::endl
+                  << "------------------" << std::endl
+                  << "|| 1: " << std::setw(12) << "4d6 ||" << std::endl
+                  << "|| 2: " << std::setw(12) << "3d6 ||" << std::endl
+                  << "|| 3: " << std::setw(12) << "Point-Buy ||" << "  <--  Unimplemented!!!" << std::endl
+                  << "------------------" << std::endl
+                  << "Choice: ";
+        choice = dice_roller::int_input(prompt.str());
+        // Update this conditional with future method implementations
+        if (choice < 1 || choice > 2)
+            countdown--;
+        else
+            good_input = true;
+        // Temporary message while point-buy system is built
+        if (choice == 3)
+            std::cout << "This doesn't work yet -- choose another option!" << std::endl;
+        
+    }
+    return choice;
+}
+
+void Abilities::generate_3d6(dice_roller::Options &options) {
 
     // Iterating from 0 - 5 because there are 6 abilities
     for (int i = 0; i < 6; i++)
     {
         // Roll a 3d6, add result to rolled_score array
-        int roll = dnd_roll(3, 6, verbose, slow, wait_time);
-        ab.rolled_scores[i] = roll;
+        int roll = dnd_roll(3, 6, options);
+        this->rolled_scores[i] = roll;
         // Describe the score value (index + 1 for natural counting)
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << roll << std::endl;
     }
 }
 
-void generate_4d6(abilities &ab, bool verbose, bool slow, int wait_time) {
+void Abilities::generate_4d6(dice_roller::Options &options) {
 
     for (int i = 0; i < 6; i++)
     {
@@ -31,37 +67,34 @@ void generate_4d6(abilities &ab, bool verbose, bool slow, int wait_time) {
         int rolls[4];
         for (int &r : rolls)
         {
-            r = dnd_roll(1, 6, verbose, slow, wait_time);
-            if (verbose)
+            r = dnd_roll(1, 6, options);
+            if (options.verbose)
             {
-                dice_roller::verbosity(&r - &rolls[0], r, slow, wait_time);
+                dice_roller::verbosity(&r - &rolls[0], r, options);
             }
         }
-
         // Sort by increasing value
         std::sort(std::begin(rolls), std::end(rolls));
-
         // Sum over the three highest values
         int rolled_score = 0;
         for (int r = 1; r < 4; r++)
         {
             rolled_score += rolls[r];
         }
-
         // Assign and display roll result
-        ab.rolled_scores[i] = rolled_score;
+        this->rolled_scores[i] = rolled_score;
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << rolled_score << std::endl;
     }
 }
 
-void assign_abilities(abilities &ab) {
+void Abilities::assign_abilities() {
 
     // Create a copy of ab's scores array (prevent class calls and modification)
     int rs[6];  // rs = rolled scores
     for (int i = 0; i < 6; i++)
     {
-        rs[i] = ab.rolled_scores[i];
+        rs[i] = this->rolled_scores[i];
     }
 
     // Create array and helper int which specify which scores have been assigned
@@ -71,14 +104,12 @@ void assign_abilities(abilities &ab) {
     std::string retry_prompt = "Score: ";
     // Flag to determine if available scores should be displayed
     bool first_time_asking = true;
-
     for (int i = 0; i < 6; i++)
     {
         // Initialize control variables
         int num = 0;
         bool keep_going = true;
-        std::string ab_name = ab.names[i];
-
+        std::string ab_name = this->names[i];
         // If only one value remains, auto-assign it to the last ability
         if (a_count == 5)
         {
@@ -89,11 +120,11 @@ void assign_abilities(abilities &ab) {
                     num = rs[j];
                 }
             }
-            ab.score_dict[ab_name] = num;
+            this->score_dict[ab_name] = num;
             break;
         }
-
         // Pretty-print the unassigned abilities
+        // Use ostringstream as an easy way to format as if using std::cout
         std::ostringstream scores_left;
         scores_left << "Available scores: [";
         for (int j = 0; j < 6; j++)
@@ -156,6 +187,6 @@ void assign_abilities(abilities &ab) {
             }
         }
 
-        ab.score_dict[ab_name] = num;
+        this->score_dict[ab_name] = num;
     }
 }
