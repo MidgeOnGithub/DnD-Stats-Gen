@@ -6,10 +6,10 @@
 
 #include "abilities.hpp"
 #include "dice_roller/dice.hpp"
-#include "dice_roller/dnd_die.hpp"
+#include "dice_roller/dnd_dice.hpp"
 
-int Abilities::method_choice() {
-    
+int Abilities::method_choice()
+{
     bool good_input = false;
     int choice;
     int countdown = 3;
@@ -45,8 +45,8 @@ int Abilities::method_choice() {
     return choice;
 }
 
-void Abilities::generate_3d6(dice_roller::Options &options) {
-
+void Abilities::generate_3d6(dice_roller::Options &options)
+{
     // Iterating from 0 - 5 because there are 6 abilities
     for (int i = 0; i < 6; i++)
     {
@@ -59,8 +59,8 @@ void Abilities::generate_3d6(dice_roller::Options &options) {
     }
 }
 
-void Abilities::generate_4d6(dice_roller::Options &options) {
-
+void Abilities::generate_4d6(dice_roller::Options &options)
+{
     for (int i = 0; i < 6; i++)
     {
         // Populate an array of 4 rolls
@@ -69,9 +69,7 @@ void Abilities::generate_4d6(dice_roller::Options &options) {
         {
             r = dnd_roll(1, 6, options);
             if (options.verbose)
-            {
                 dice_roller::verbosity(&r - &rolls[0], r, options);
-            }
         }
         // Sort by increasing value
         std::sort(std::begin(rolls), std::end(rolls));
@@ -88,15 +86,14 @@ void Abilities::generate_4d6(dice_roller::Options &options) {
     }
 }
 
-void Abilities::assign_abilities() {
-
+void Abilities::assign_abilities()
+{
     // Create a copy of ab's scores array (prevent class calls and modification)
     int rs[6];  // rs = rolled scores
     for (int i = 0; i < 6; i++)
     {
         rs[i] = this->rolled_scores[i];
     }
-
     // Create array and helper int which specify which scores have been assigned
     bool assigned[6] = {false, false, false, false, false, false};
     int a_count = 0;
@@ -155,7 +152,6 @@ void Abilities::assign_abilities() {
                 std::cout << scores_left.str() << std::endl;
             // Set to false to ensure the correct flag upon the second time asking
             first_time_asking = false;
-
             /* Get an int, num, from user using int_input from dice module
              * num indicates which value the user wants to assign to the prompted ability */
             num = dice_roller::int_input(prompt, retry_prompt);
@@ -186,7 +182,6 @@ void Abilities::assign_abilities() {
                 std::cout << msg << std::endl;
             }
         }
-
         this->score_dict[ab_name] = num;
     }
 }

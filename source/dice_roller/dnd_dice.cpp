@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "dice.hpp"
-#include "dnd_die.hpp"
+#include "dnd_dice.hpp"
 
 int dnd_roll(int num_dice, int num_sides, dice_roller::Options options)
 {

@@ -15,7 +15,7 @@ public:
 
     Character();
     Character(std::string name);
-    
+
     Abilities ab;
     // Other unimplemented aspects of a PC
     //class cls
@@ -25,8 +25,11 @@ public:
     std::string get_name();
     void set_name(std::string new_name);
 
+    std::string print_character_summary();
+
 private:
 
+    std::string get_name_input();
     std::string name;
 
 };

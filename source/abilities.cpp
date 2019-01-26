@@ -4,36 +4,33 @@
 
 #include "abilities.hpp"
 
-Abilities::Abilities() {
-
+Abilities::Abilities()
+{
+    // Initialize a dictionary with names as keys, values of 0 (no arg needed)
     for (int i = 0; i < 6; i++)
     {
-        score_dict[names[i]] = rolled_scores[i];  // Initialize a dictionary with names as keys, values of 0 (no arg needed)
+        score_dict[names[i]] = rolled_scores[i];
     }
 }
 
-int Abilities::get_ability_score(std::string name) {
-
-    if (score_dict.find(name) == score_dict.end())
-    {
-        index_error(1);
-    }
-
-    return score_dict[name];
+int Abilities::get_ability_score(std::string ability)
+{
+    if (score_dict.find(ability) == score_dict.end())
+        throw std::invalid_argument ("Passed ability does not exist.");
+    return score_dict[ability];
 }
 
-void Abilities::set_ability_score(std::string name, int score) {
-
-    if (score_dict.find(name) == score_dict.end())
-    {
-        index_error(2);
-    }
-
-    score_dict[name] = score;
+void Abilities::set_ability_score(std::string ability, int score)
+{
+    if (score_dict.find(ability) == score_dict.end())
+        throw std::invalid_argument ("Passed ability does not exist.");
+    else if (score > 20)  // 20 is the maximum per rules
+        score = 20;
+    score_dict[ability] = score;
 }
 
-std::string Abilities::print_ability_scores() {
-
+std::string Abilities::print_ability_scores()
+{
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream scores;
     scores << "[";
@@ -42,71 +39,73 @@ std::string Abilities::print_ability_scores() {
         std::string name = get_ability_name(i);
         scores << get_ability_score(name);
         if (i < 5)  // Don't print a comma and space for the last element
-        {
             scores << ", ";
-        }
     }
     scores << "]" << std::endl;
-
     // Return as a string
     return scores.str();
 }
 
-int Abilities::get_rolled_score(int i) {
-
+int Abilities::get_score_modifier(int i)
+{
     if (i > 5)
-    {
-        index_error(3);
-    }
+        throw std::invalid_argument ("score_modifier only has indices 0 - 5.");
+    return score_modifiers[i];
+}
 
+void Abilities::set_score_modifier(int i, int score)
+{
+    if (i > 5)
+        throw std::invalid_argument ("score_modifier only has indices 0 - 5.");
+    else if (score > 20)  // 20 is the maximum per rules
+        score = 20;
+    score_modifiers[i] = score;
+}
+
+int Abilities::get_rolled_score(int i)
+{
+    if (i > 5)
+        throw std::invalid_argument ("rolled_scores only has indices 0 - 5.");
     return rolled_scores[i];
 }
 
-void Abilities::set_rolled_score(int i, int score) {
-
+void Abilities::set_rolled_score(int i, int score)
+{
     if (i > 5)
-    {
-        index_error(4);
-    }
-
+        throw std::invalid_argument ("rolled_scores only has indices 0 - 5.");
+    else if (score > 18)  // 20 is the maximum possible from a roll
+        score = 20;
     rolled_scores[i] = score;
 }
 
-std::string Abilities::print_rolled_scores() {
-
+std::string Abilities::print_rolled_scores()
+{
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream scores;
     scores << "[";
     for (int i = 0; i < 6; i++)
     {
         scores << get_rolled_score(i);
-
         if (i < 5)  // Don't print a comma and space for the last element
-        {
             scores << ", ";
-        }
     }
     scores << "]" << std::endl;
-
     // Return as a string
     return scores.str();
 }
 
-std::string Abilities::get_ability_name(int i) {
-
+std::string Abilities::get_ability_name(int i)
+{
     if (i > 5)
-    {
-        index_error(5);
-    }
-
+        throw std::invalid_argument ("ability_name only has indices 0 - 5.");
     return names[i];
 }
 
-std::string Abilities::print_ability_summary() {
-
+std::string Abilities::print_ability_summary()
+{
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
-    summary << "Final Ability Scores" << std::endl
+    summary << "Ability Scores" << std::endl
             << "--------------------" << std::endl;
     for (int i = 0; i < 6; i++)
     {
@@ -115,31 +114,6 @@ std::string Abilities::print_ability_summary() {
                 << std::setw(02) << std::right << score_dict[ab_name] << std::endl;
     }
     summary << "--------------------" << std::endl;
-
     // Return as a string
     return summary.str();
-}
-
-void Abilities::index_error(int e_code) {
-
-    switch(e_code)
-    {
-        case 1 : std::cout << "Name passed to get_ability_score is not an ability.";
-                 exit(1);
-
-        case 2 : std::cout << "Name passed to set_ability_score is not an ability.";
-                 exit(2);
-
-        case 3 : std::cout << "Index passed to get_score is out of range.";
-                 exit(3);
-
-        case 4 : std::cout << "Index passed to set_score is out of range.";
-                 exit(4);
-
-        case 5 : std::cout << "Index passed to get_name is out of range.";
-                 exit(5);
-
-        default : std::cout << "Unknown index_error while running an Abilities class method.";
-                  exit(9);
-    }
 }

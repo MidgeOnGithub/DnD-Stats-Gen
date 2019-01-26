@@ -18,25 +18,29 @@ public:
     void assign_abilities();
     // End Script Functions
 
-    int get_ability_score(std::string name);  // Returns score assigned to ability (name)
-    void set_ability_score(std::string name, int score = 0);  // Sets ability (name) to score s
-    std::string print_ability_scores();  // Pretty-prints final ability scores
+    int get_ability_score(std::string ability);                  // Returns score assigned to ability
+    void set_ability_score(std::string ability, int score = 0);  // Sets ability to score s
+    std::string print_ability_scores();                          // Pretty-prints final ability scores
 
-    int get_rolled_score(int i);  // Returns score at index i
+    int get_score_modifier(int i);              // Returns score modifier of ability
+    void set_score_modifier(int i, int score);  // Sets score modifier of ability
+
+    int get_rolled_score(int i);              // Returns score at index i
     void set_rolled_score(int i, int score);  // Sets index i to score s
-    std::string print_rolled_scores();  // Pretty-prints the rolled scores
+    std::string print_rolled_scores();        // Pretty-prints the rolled scores
 
     std::string get_ability_name(int i);  // Returns ability name (indexed by character sheet order)
-    // No set_name method exists because ability names are pre-determined in DnD
+                                          // No set_name method exists because ability names are pre-determined in DnD
 
     std::string print_ability_summary();  // Pretty-prints the dictionary
 
-    void index_error(int e_code);  // Prints an error message and exits instead of using garbage memory
+    void index_error(int error_code);  // Prints an error message and exits instead of using garbage memory
 
 
 private:
 
-    int rolled_scores[6] = {0, 0, 0, 0, 0, 0};  // Stores rolled score values
+    int rolled_scores[6] = {0, 0, 0, 0, 0, 0};   // Stores rolled score values
+    int score_modifiers[6] = {0, 0, 0, 0, 0, 0}; // Stores ability score modifiers
 
     // List ability names by order on official character creation sheet
     const std::string names[6] = {"Strength", "Dexterity", "Constitution",

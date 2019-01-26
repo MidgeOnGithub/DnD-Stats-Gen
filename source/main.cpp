@@ -60,15 +60,14 @@ int main(int argc, const char *argv[])
     pc.ab.assign_abilities();
 
     // Print a summary of the final results
-    std::string full_summary = pc.ab.print_ability_summary();
-    std::cout << full_summary << std::endl;
+    std::string full_summary = pc.print_character_summary();
+    std::cout << pc.ab.print_ability_summary() << std::endl;
 
     // Offer to output a summary (skip if user specified --no-output)
     if (should_file_be_written(program_args))
     {
         file_output(program_args.f_name, full_summary);
-        std::cout << "Successfully wrote summary to `" << program_args.f_name << ".txt`!" << std::endl;
-    } 
+    }
     else
         std::cout << "Per your instructions, no output was generated." << std::endl;
 
@@ -181,6 +180,7 @@ void file_output(std::string file_name, std::string out_text)
         file.open(file_name + ".txt");
         file << out_text;
         file.close();
+        std::cout << "Successfully wrote summary to `" << file_name << ".txt`!" << std::endl;
     } else
     {
         std::cout << "Sorry, could not successfully open the file!" << std::endl

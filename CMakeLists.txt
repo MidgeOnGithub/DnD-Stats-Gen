@@ -23,8 +23,8 @@ target_sources(DnD-Stats-Gen
         source/character.hpp
         source/dice_roller/dice.cpp
         source/dice_roller/dice.hpp
-        source/dice_roller/dnd_die.cpp
-        source/dice_roller/dnd_die.hpp
+        source/dice_roller/dnd_dice.cpp
+        source/dice_roller/dnd_dice.hpp
 )
 
 target_link_libraries(DnD-Stats-Gen
