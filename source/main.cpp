@@ -82,7 +82,7 @@ int main(int argc, const char *argv[])
 /* "Dirty" function. Alters argments and returns a bool.
  * Tries to parse and evalutate command line args as needed.
  * The returned bool tells the caller if it should continue. */
-bool parse_args(int argc, const char *argv[], Program_Args &args) 
+bool parse_args(int argc, const char *argv[], Program_Args &args)
 {
     try
     {

@@ -6,14 +6,15 @@
 namespace dice_roller
 {
     struct Options {
-        bool verbose = false;
-        bool slow = false;
+        Options(): verbose(false), slow(false), wait_time(0) {}
+        bool verbose;
+        bool slow;
         int wait_time;
     };
 
     int int_input(std::string initial_prompt = "", std::string retry_prompt = "");
-    int roll_die(int num_die = 0, int num_sides = 0, dice_roller::Options &options);
-    void verbosity(int which_dice, int landing, dice_roller::Options &options);
+    int roll_dice(int num_dice = 0, int num_sides = 0, Options options = Options());
+    void verbosity(int which_die, int landing, Options options);
 }
 
 #endif //DICE_ROLLER_HPP

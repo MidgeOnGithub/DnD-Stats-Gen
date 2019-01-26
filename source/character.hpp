@@ -25,8 +25,6 @@ public:
     std::string get_name();
     void set_name(std::string new_name);
 
-    ~Character();
-
 private:
 
     std::string name;
