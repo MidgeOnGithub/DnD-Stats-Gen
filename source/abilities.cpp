@@ -6,10 +6,10 @@
 
 Abilities::Abilities()
 {
-    // Initialize a dictionary with names as keys, values of 0 (no arg needed)
+    // Initialize the dictionary with zeroed values
     for (int i = 0; i < 6; i++)
     {
-        score_dict[names[i]] = rolled_scores[i];
+        score_dict[names[i]] = generated_scores[i];
     }
 }
 
@@ -31,14 +31,15 @@ void Abilities::set_ability_score(std::string ability, int score)
 
 std::string Abilities::print_ability_scores()
 {
-    // Use ostringstream as an easy way to format as if using std::cout
+    // Use ostringstream to format as if using std::cout
     std::ostringstream scores;
     scores << "[";
     for (int i = 0; i < 6; i++)
     {
         std::string name = get_ability_name(i);
         scores << get_ability_score(name);
-        if (i < 5)  // Don't print a comma and space for the last element
+		// Don't print a comma and space for the last element
+		if (i < 5)
             scores << ", ";
     }
     scores << "]" << std::endl;
@@ -65,28 +66,29 @@ void Abilities::set_score_modifier(int i, int score)
 int Abilities::get_rolled_score(int i)
 {
     if (i > 5)
-        throw std::invalid_argument ("rolled_scores only has indices 0 - 5.");
-    return rolled_scores[i];
+        throw std::invalid_argument ("generated_scores only has indices 0 - 5.");
+    return generated_scores[i];
 }
 
 void Abilities::set_rolled_score(int i, int score)
 {
     if (i > 5)
-        throw std::invalid_argument ("rolled_scores only has indices 0 - 5.");
+        throw std::invalid_argument ("generated_scores only has indices 0 - 5.");
     else if (score > 18)  // 20 is the maximum possible from a roll
         score = 20;
-    rolled_scores[i] = score;
+    generated_scores[i] = score;
 }
 
 std::string Abilities::print_rolled_scores()
 {
-    // Use ostringstream as an easy way to format as if using std::cout
+    // Use ostringstream to format as if using std::cout
     std::ostringstream scores;
     scores << "[";
     for (int i = 0; i < 6; i++)
     {
         scores << get_rolled_score(i);
-        if (i < 5)  // Don't print a comma and space for the last element
+		// Don't print a comma and space for the last element
+        if (i < 5)  
             scores << ", ";
     }
     scores << "]" << std::endl;
@@ -103,7 +105,7 @@ std::string Abilities::get_ability_name(int i)
 
 std::string Abilities::print_ability_summary()
 {
-    // Use ostringstream as an easy way to format as if using std::cout
+    // Use ostringstream to format as if using std::cout
     std::ostringstream summary;
     summary << "Ability Scores" << std::endl
             << "--------------------" << std::endl;

@@ -11,13 +11,14 @@
 
 #include "dice.hpp"
 
-int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
+int dice_roller::int_input(std::string initial_prompt,
+						   std::string retry_prompt)
 {
     int num;
     // Set a generic retry prompt if one was not given
     if (retry_prompt.empty())
         retry_prompt = "Number: ";
-    // If the user provided an initial prompt, display, else give the retry prompt
+    // If provided, display initial prompt
     if (initial_prompt.empty())
         std::cout << retry_prompt;
     else
@@ -29,11 +30,12 @@ int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
         std::string input;
         getline(std::cin, input);
         std::stringstream check_stream(input);
+		// Accept if it's an int > 0
         if (check_stream >> num && num > 0)
-            break;  // Accept if it's an int > 0
-        /* Omission of std::endl between retry_prompt and fail message:
-         * Assumes user uses "Enter" aka "carriage return" to end input
-         * This can be bypassed by someone clever enough */
+            break;
+        /* Omission of std::endl between retry_prompt and fail message
+         * assumes user uses "Enter" aka "carriage return" to end input
+         * This can be bypassed by someone but isn't a big concern */
         std::cout << "Invalid input -- try again!" << std::endl;
         // Ensure user is re-prompted
         std::cout << retry_prompt;
@@ -42,20 +44,24 @@ int dice_roller::int_input(std::string initial_prompt, std::string retry_prompt)
     return num;
 }
 
-int dice_roller::roll_dice(int num_dice, int num_sides, Options options)
+int dice_roller::roll_dice(int num_dice, int num_sides,
+						   Options options)
 {
     // Ensure wait_time works "as intended"
-    if (options.wait_time < 1)
+    if (options.wait_time < 0)
     {
-        std::cout << "WARNING -- Given wait time was invalid. Reverting to default." << std::endl;
+        std::cout << "WARNING -- Given wait time was invalid. "
+				  << "Reverting to default." << std::endl;
         options.wait_time = 750;
     }
     /* If not given in function call:
      * Determine how many n-sided dice to roll by input */
     if (num_dice < 1)
-        num_dice = dice_roller::int_input("Enter the amount of dice to be rolled: ", "Dice count: ");
+        num_dice = dice_roller::int_input("Amount of dice to roll: ",
+									      "Dice count: ");
     if (num_sides < 1)
-        num_sides = dice_roller::int_input("Now enter how many sides each die has: ", "Die sides: ");
+        num_sides = dice_roller::int_input("Sides on each die: ",
+										   "Die sides: ");
     // Create a generator based on OS-specific non-deterministic RNG
     boost::random::random_device dice;
     // Restrict outputs to a uniform int distribution based on the dice
@@ -81,7 +87,8 @@ int dice_roller::roll_dice(int num_dice, int num_sides, Options options)
     return roll_sum;
 }
 
-void dice_roller::verbosity(int which_die, int landing, Options options)
+void dice_roller::verbosity(int which_die, int landing,
+							Options options)
 {
     // Be verbose
     std::cout << "Dice " << which_die << ": " << landing << std::endl;

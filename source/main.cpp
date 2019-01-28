@@ -1,6 +1,7 @@
 // Must include first due to pre-processors
-//#include <Python.h> // includes <stdio.h>, <string.h>, <errno.h>, and <stdlib.h>
-// TODO: Consider running ../data/utils/json_gen.py from `main` or just using pre-gen JSON
+// also includes <stdio.h>, <string.h>, <errno.h>, and <stdlib.h>
+//#include <Python.h>
+// TODO: Consider running ../data/utils/json_gen.py from `main`
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -29,8 +30,8 @@ int main(int argc, const char *argv[])
         return 1;
 
     // Introductory message
-    std::cout << std::endl << "Welcome to the DnD Stats Generator!" << std::endl
-              << "========================================" << std::endl << std::endl;
+    std::cout << "\nWelcome to the DnD Stats Generator!\n"
+              << "=================================\n" << std::endl;
               
     // Get the generated character's name
     std::string character_name;
@@ -42,20 +43,21 @@ int main(int argc, const char *argv[])
     method = pc.ab.method_choice();
     switch(method)
     {
-        case 1: std::cout << std::endl << "Chosen method: 4d6" << std::endl;
+        case 1: std::cout << "\nChosen method: 4d6" << std::endl;
                 pc.ab.generate_4d6(program_args.roll_options);
                 break;
 
-        case 2: std::cout << std::endl << "Chosen method: 3d6" << std::endl;
+        case 2: std::cout << "\nChosen method: 3d6" << std::endl;
                 pc.ab.generate_3d6(program_args.roll_options);
                 break;
 
         case 3: // Option not implemented yet, method_choice prevents this return
-                //std::cout << std::endl << "Chosen method: Point-Buy" << std::endl;
-                //point_buy(ab, verbose);
+                //std::cout << "\nChosen method: Point-Buy" << std::endl;
+                //pc.ab.point_buy(program_args.roll_options);
                 break;
     }
-    std::cout << std::endl << "Generated ability scores: " << pc.ab.print_rolled_scores() << std::endl;
+    std::cout << std::endl << "Generated ability scores: "
+			  << pc.ab.print_rolled_scores() << std::endl;
     // Interface with user to assign scores to character's abilities
     pc.ab.assign_abilities();
 
@@ -65,15 +67,15 @@ int main(int argc, const char *argv[])
 
     // Offer to output a summary (skip if user specified --no-output)
     if (should_file_be_written(program_args))
-    {
         file_output(program_args.f_name, full_summary);
-    }
     else
-        std::cout << "Per your instructions, no output was generated." << std::endl;
+        std::cout << "Per your instructions, no output was generated."
+		          << std::endl;
 
     // Give exit message and close
-    std::cout << std::endl << "========================================" << std::endl
-              << "Thanks for using the DnD Stats Generator!" << std::endl;
+    std::cout << "\n=================================\n"
+              << "Thanks for using the DnD Stats Generator!"
+			  << std::endl;
 
     return 0;
 }
@@ -92,15 +94,22 @@ bool parse_args(int argc, const char *argv[], Program_Args &args)
                 ("help",
                  "This help screen.\n")
                 ("verbose,v",
-                 "Verbose switch -- primarily affects the dice roller. Will trigger the default `slow` unless `no-slow` is also passed.\n")
+                 "Verbose switch -- primarily affects the dice roller."
+				 " Triggers `slow` unless `no-slow` is also passed.\n")
                 ("no-slow,x",
-                 "A switch that disables `slow`. Only needed if `verbose` is desired but without pauses between inputs.\n")
+                 "A switch that disables `slow`. "
+				 "Only needed if `verbose` is desired but "
+				 "without pauses between inputs.\n")
                 ("slow,s", po::value<int>()->default_value(350),
-                 "An optional value (milliseconds) to set a timer between die rolls. Depends on `verbose` and `no-slow`. Do not chain with other options.\n")
+                 "Used to set a custom ms delay between dice rolls. "
+				 "Depends on `verbose` and `no-slow`.\n")
                 ("output-file-name,o", po::value<std::string>(),
-                 "Parameter to output a summary to `file_name`.txt (extension will be appended by the program) to the working directory. Do not chain with other options.\n")
+                 "Parameter to output a summary to `file_name`.txt "
+				 "(extension will be appended by the program) "
+				 "to the working directory.\n")
                 ("no-output",
-                 "Switch to indicate the program should not create any kind of output file(s).\n");
+                 "Switch to indicate the program should not create "
+				 "any kind of output file(s).\n");
 
         // Parse given command-line arguments into a variable map
         po::variables_map vm;
@@ -129,10 +138,12 @@ bool parse_args(int argc, const char *argv[], Program_Args &args)
             args.f_name = vm["output-file-name"].as<std::string>();
         }
     }
-        // If argument parsing or evaluating generates an error, state error and exit
+    // TODO: Use help output when only the parsing fails
+	// If argument parsing or manipulation fails, state and exit
     catch (const po::error &ex)
     {
-        std::cerr << "Argument Parse Error: " << ex.what() << std::endl;
+        std::cerr << "Argument Parse Error\n"
+				  << ex.what() << std::endl;
         return false;
     }
     catch (std::exception &ex)
@@ -140,6 +151,7 @@ bool parse_args(int argc, const char *argv[], Program_Args &args)
         std::cerr << ex.what()<< std::endl;
         return false;
     }
+
     return true;
 }
 
@@ -152,10 +164,10 @@ bool should_file_be_written(Program_Args &args)
         return true;
     // If command arguments do not given a direct answer, ask user
     std::cout << "Output a character summary to a text file? (y/n): ";
-    std::string confirm;
-    getline(std::cin, confirm);
-    // Get the first letter of confirm for comparison
-    std::string letter = confirm.substr(0, 1);
+    // Get the first letter for comparison
+	std::string confirmation;
+    getline(std::cin, confirmation);
+    std::string letter = confirmation.substr(0, 1);
     if (letter == "y" || letter == "Y")
         return true;
     return false;
@@ -169,7 +181,8 @@ void file_output(std::string file_name, std::string out_text)
     {
         while (file_name.empty())
         {
-            std::cout << "What should the file be named? (\".txt\" will be appended): ";
+            std::cout << "What should the file be named? "
+						 "(\".txt\" will be appended): ";
             getline(std::cin, file_name);
         }
     }
@@ -180,10 +193,11 @@ void file_output(std::string file_name, std::string out_text)
         file.open(file_name + ".txt");
         file << out_text;
         file.close();
-        std::cout << "Successfully wrote summary to `" << file_name << ".txt`!" << std::endl;
+        std::cout << "Successfully wrote summary to `"
+				  << file_name << ".txt`!" << std::endl;
     } else
     {
-        std::cout << "Sorry, could not successfully open the file!" << std::endl
-                  << "Check space, memory, and permissions!" << std::endl;
+        std::cout << "Sorry, could not successfully open the file!\n"
+                  << "Check space, memory, permissions." << std::endl;
     }
 }

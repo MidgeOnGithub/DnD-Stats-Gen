@@ -12,15 +12,16 @@ public:
     Abilities();
 
     // Script functions
-    int method_choice();
-    void generate_3d6(dice_roller::Options &options);
-    void generate_4d6(dice_roller::Options &options);
-    void assign_abilities();
+    int method_choice();                               // Get the user's choice of below scripts for value generation
+    void generate_3d6(dice_roller::Options &options);  // Dice roll generation method
+    void generate_4d6(dice_roller::Options &options);  // Dice roll generation method
+	//void point_buy(dice_roller::Options &options);   // Unimplemented generation method
+    void assign_abilities();                           // Interface with user to assign rolled scores into dictionary
     // End Script Functions
 
     int get_ability_score(std::string ability);                  // Returns score assigned to ability
-    void set_ability_score(std::string ability, int score = 0);  // Sets ability to score s
-    std::string print_ability_scores();                          // Pretty-prints final ability scores
+    void set_ability_score(std::string ability, int score = 0);  // Sets ability's score value
+    std::string print_ability_scores();                          // Pretty-prints ability scores
 
     int get_score_modifier(int i);              // Returns score modifier of ability
     void set_score_modifier(int i, int score);  // Sets score modifier of ability
@@ -30,23 +31,21 @@ public:
     std::string print_rolled_scores();        // Pretty-prints the rolled scores
 
     std::string get_ability_name(int i);  // Returns ability name (indexed by character sheet order)
-                                          // No set_name method exists because ability names are pre-determined in DnD
+                                          // No set_name method since ability names are pre-determined
 
-    std::string print_ability_summary();  // Pretty-prints the dictionary
-
-    void index_error(int error_code);  // Prints an error message and exits instead of using garbage memory
-
+    std::string print_ability_summary();  // Pretty-prints the ability dictionary
 
 private:
 
-    int rolled_scores[6] = {0, 0, 0, 0, 0, 0};   // Stores rolled score values
-    int score_modifiers[6] = {0, 0, 0, 0, 0, 0}; // Stores ability score modifiers
+    int generated_scores[6] = {0, 0, 0, 0, 0, 0};  // Stores generated score values
+    int score_modifiers[6] = {0, 0, 0, 0, 0, 0};   // Stores ability score modifiers
 
     // List ability names by order on official character creation sheet
-    const std::string names[6] = {"Strength", "Dexterity", "Constitution",
-                                  "Intelligence", "Wisdom", "Charisma"};
+    const std::string names[6] = {"Strength", "Dexterity",
+								  "Constitution", "Intelligence",
+								  "Wisdom", "Charisma"};
 
-    std::map<std::string, int> score_dict; // Dictionary mapping ability names to "acting" score
+    std::map<std::string, int> score_dict; // Dictionary mapping ability names to active scores
 
 };
 

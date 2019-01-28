@@ -18,19 +18,21 @@ int Abilities::method_choice()
         // Prevent infinite looping possibility
         if (countdown == 0)
         {
-            std::cout << "Failed to get input after three tries -- aborting program." << std::endl;
+            std::cout << "Failed to get input after three tries.\n"
+				         "Terminating program." << std::endl;
             exit(2);
         }
         // Prompt the user and check their response
-        // Use ostringstream as an easy way to format as if using std::cout
+        // Use ostringstream to format as if using std::cout
         std::ostringstream prompt;
-        prompt << "What method should we use to generate ability scores?" << std::endl
-                  << "------------------" << std::endl
-                  << "|| 1: " << std::setw(12) << "4d6 ||" << std::endl
-                  << "|| 2: " << std::setw(12) << "3d6 ||" << std::endl
-                  << "|| 3: " << std::setw(12) << "Point-Buy ||" << "  <--  Unimplemented!!!" << std::endl
-                  << "------------------" << std::endl
-                  << "Choice: ";
+        prompt << "How should we generate ability scores?\n"
+               << "------------------\n"
+               << "|| 1: " << std::setw(12) << "4d6 ||\n"
+               << "|| 2: " << std::setw(12) << "3d6 ||\n"
+               << "|| 3: " << std::setw(12) << "Point-Buy ||"
+			   << "  <--  Unimplemented!!!\n"
+               << "------------------\n"
+               << "Choice: ";
         choice = dice_roller::int_input(prompt.str());
         // Update this conditional with future method implementations
         if (choice < 1 || choice > 2)
@@ -39,7 +41,8 @@ int Abilities::method_choice()
             good_input = true;
         // Temporary message while point-buy system is built
         if (choice == 3)
-            std::cout << "This doesn't work yet -- choose another option!" << std::endl;
+            std::cout << "This doesn't work yet"
+					  << " -- choose another option!" << std::endl;
         
     }
     return choice;
@@ -52,7 +55,7 @@ void Abilities::generate_3d6(dice_roller::Options &options)
     {
         // Roll a 3d6, add result to rolled_score array
         int roll = dnd_roll(3, 6, options);
-        this->rolled_scores[i] = roll;
+        this->generated_scores[i] = roll;
         // Describe the score value (index + 1 for natural counting)
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << roll << std::endl;
@@ -80,7 +83,7 @@ void Abilities::generate_4d6(dice_roller::Options &options)
             rolled_score += rolls[r];
         }
         // Assign and display roll result
-        this->rolled_scores[i] = rolled_score;
+        this->generated_scores[i] = rolled_score;
         std::cout << "Roll " << i + 1 << " = "
                   << std::setw(2) << rolled_score << std::endl;
     }
@@ -92,7 +95,7 @@ void Abilities::assign_abilities()
     int rs[6];  // rs = rolled scores
     for (int i = 0; i < 6; i++)
     {
-        rs[i] = this->rolled_scores[i];
+        rs[i] = this->generated_scores[i];
     }
     // Create array and helper int which specify which scores have been assigned
     bool assigned[6] = {false, false, false, false, false, false};
@@ -121,19 +124,23 @@ void Abilities::assign_abilities()
             break;
         }
         // Pretty-print the unassigned abilities
-        // Use ostringstream as an easy way to format as if using std::cout
+        // Use ostringstream to format as if using std::cout
         std::ostringstream scores_left;
         scores_left << "Available scores: [";
         for (int j = 0; j < 6; j++)
         {
-            // Skip writing the value if it has already been assigned
+            // Skip assigning the value if already assigned
             if (assigned[j]) continue;
             scores_left << rs[j];
-            if (j != 5)  // Don't print a comma and space for the last element
+			// Loop to prevent printing comma and space on last element
+			if (j != 5)
             {
-                for (int k = j + 1; k < 6; k++)  // If remaining indices are assigned, current index is last
+				// If remaining indices are assigned
+				// current index is last
+                for (int k = j + 1; k < 6; k++)
                 {
-                    // If a remaining index is unassigned, current index is not last, thus the comma and space
+                    // If a remaining index is unassigned, current index
+					// is not last, thus the comma and space
                     if (!assigned[k])
                     {
                         scores_left << ", ";
@@ -145,15 +152,16 @@ void Abilities::assign_abilities()
         scores_left << "]";
 
         // Create prompt specific to current ability
-        std::string prompt = "Which score would you like to assign to " + ab_name + "? ";
+        std::string prompt = "Choose a score to assign to "
+							 + ab_name + ": ";
         while (keep_going)
         {
             if (!first_time_asking)
                 std::cout << scores_left.str() << std::endl;
-            // Set to false to ensure the correct flag upon the second time asking
+            // Set to false to ensure the correct prompt next time
             first_time_asking = false;
-            /* Get an int, num, from user using int_input from dice module
-             * num indicates which value the user wants to assign to the prompted ability */
+            /* Get choice from user using int_input from dice module
+             * num indicates which value the user wants to assign */
             num = dice_roller::int_input(prompt, retry_prompt);
             for (int j = 0; j < 6; j++)
             {
@@ -168,7 +176,7 @@ void Abilities::assign_abilities()
                 }
             }
 
-            // If the user puts in an impossible or unavailable value
+            // If the user inputs an impossible or unavailable value
             if (keep_going)
             {
                 std::string msg;
@@ -178,7 +186,7 @@ void Abilities::assign_abilities()
                     msg = "That's a bit harsh!";
                 else
                     msg = "That wasn't an available score!";
-                // Print decided message to the user
+                // Print out to the user
                 std::cout << msg << std::endl;
             }
         }

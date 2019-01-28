@@ -13,13 +13,14 @@ int dnd_roll(int num_dice, int num_sides, dice_roller::Options options)
 {
     /* Check against each special die (relative to DnD)
      * Based on what kind of die, call the correct function
-     * The functions within this source file call dice_roller::roll_dice
+     * Functions within this source file call dice_roller::roll_dice
      * Or make changes to printed values accordingly */
 
     // Ensure wait_time works "as intended"
     if (options.wait_time < 1)
     {
-        std::cout << "Given wait time was invalid. Reverting to default." << std::endl;
+        std::cout << "Given wait time was invalid. "
+					 "Reverting to default." << std::endl;
         options.wait_time = 750;
     }
 
@@ -60,8 +61,9 @@ int d100_roller(int num_dice, dice_roller::Options options)
          * I.e., 0 = 0, not 10 */
         int ones_place = d10_display(dice_roller::roll_dice(1, 10));
         // Summarize the two dice
-        std::cout << "Percentile roll: " << percentile_face << "0" << std::endl
-                  << std::setw(18) << std::left << "Ones-Place roll: " << ones_place << std::endl;
+        std::cout << "Percentile roll: " << percentile_face << "0\n"
+                  << std::setw(18) << std::left << "Ones-Place roll: "
+				  << ones_place << std::endl;
         // Now evaluate the roll
         int landing = 0;
         if (percentile == 0 && ones_place == 0)
