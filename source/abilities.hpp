@@ -5,6 +5,9 @@
 
 #include "dice_roller/dice.hpp"
 
+// Get the user's choice of script function for value generation
+int method_choice();
+
 class Abilities {
 
 public:
@@ -12,7 +15,6 @@ public:
     Abilities();
 
     // Script functions
-    int method_choice();                               // Get the user's choice of below scripts for value generation
     void generate_3d6(dice_roller::Options &options);  // Dice roll generation method
     void generate_4d6(dice_roller::Options &options);  // Dice roll generation method
 	//void point_buy(dice_roller::Options &options);   // Unimplemented generation method

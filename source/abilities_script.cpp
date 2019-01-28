@@ -8,7 +8,7 @@
 #include "dice_roller/dice.hpp"
 #include "dice_roller/dnd_dice.hpp"
 
-int Abilities::method_choice()
+int method_choice()
 {
     bool good_input = false;
     int choice;

@@ -4,8 +4,8 @@
 */
 #include <iostream>
 #include <sstream>
-#include <boost/chrono.hpp>
-#include <boost/thread.hpp>
+#include <chrono>
+#include <thread>
 #include <boost/random.hpp>
 #include <boost/random/random_device.hpp>
 
@@ -66,8 +66,6 @@ int dice_roller::roll_dice(int num_dice, int num_sides,
     boost::random::random_device dice;
     // Restrict outputs to a uniform int distribution based on the dice
     boost::random::uniform_int_distribution<int> faces(1, num_sides);
-    // Combine the device and distribution into a simply-callable RNG
-    boost::function<int()> roll = boost::bind(faces, boost::ref(dice));
     // Now perform the rolls
     int landing = 0;   // Single dice's value
     int roll_sum = 0;  // The sum of all dice landings
@@ -76,7 +74,7 @@ int dice_roller::roll_dice(int num_dice, int num_sides,
     for (int i = 1; i <= num_dice; i++)
     {
         // Roll the dice one at a time
-        landing = roll();
+        landing = faces(dice);
         // Say each individual roll, pause between if desired
         if (options.verbose && num_dice > 1)
             dice_roller::verbosity(i, landing, options);
@@ -94,5 +92,5 @@ void dice_roller::verbosity(int which_die, int landing,
     std::cout << "Dice " << which_die << ": " << landing << std::endl;
     // Pause if desired
     if (options.slow)
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(options.wait_time));
+        std::this_thread::sleep_for(std::chrono::milliseconds(options.wait_time));
 }

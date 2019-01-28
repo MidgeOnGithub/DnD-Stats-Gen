@@ -1,7 +1,7 @@
 // Must include first due to pre-processors
 // also includes <stdio.h>, <string.h>, <errno.h>, and <stdlib.h>
 //#include <Python.h>
-// TODO: Consider running ../data/utils/json_gen.py from `main`
+// TODO: Consider running ../data/utils/json_gen.py or otherwise ensuring data JSON files exist
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -40,7 +40,7 @@ int main(int argc, const char *argv[])
 
     // Generate ability scores based on user's method choice
     int method;
-    method = pc.ab.method_choice();
+    method = method_choice();
     switch(method)
     {
         case 1: std::cout << "\nChosen method: 4d6" << std::endl;
