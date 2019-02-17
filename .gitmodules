@@ -1,9 +1,12 @@
-[submodule "vendor/boost-cmake"]
-	path = vendor/boost-cmake
-	url = https://github.com/Orphis/boost-cmake.git
 [submodule "data"]
 	path = data
 	url = https://github.com/MidgeOnGithub/DnD-Data.git
 [submodule "vendor/nlohmann_json"]
 	path = vendor/nlohmann_json
 	url = https://github.com/nlohmann/json.git
+[submodule "vendor/boost-random"]
+	path = vendor/boost-random
+	url = https://github.com/boostorg/random.git
+[submodule "vendor/boost-program_options"]
+	path = vendor/boost-program_options
+	url = https://github.com/boostorg/program_options.git
