@@ -4,9 +4,3 @@
 [submodule "vendor/nlohmann_json"]
 	path = vendor/nlohmann_json
 	url = https://github.com/nlohmann/json.git
-[submodule "vendor/boost-random"]
-	path = vendor/boost-random
-	url = https://github.com/boostorg/random.git
-[submodule "vendor/boost-program_options"]
-	path = vendor/boost-program_options
-	url = https://github.com/boostorg/program_options.git
