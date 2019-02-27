@@ -3,21 +3,25 @@
 
 #include <string>
 
-namespace dice_roller
-{
-    struct Options {
-        Options(): verbose(false), slow(false), wait_time(0) {}
-        bool verbose;
-        bool slow;
-        int wait_time;
-    };
+namespace dice_roller {
 
-    int int_input(std::string initial_prompt = "",
-				  std::string retry_prompt = "");
-    int roll_dice(int num_dice = 0, int num_sides = 0,
-				  Options options = Options());
-    void verbosity(int which_die, int landing,
-		           Options options);
+  struct Options {
+    Options() : verbose(false), slow(false), wait_time(750) {};
+    bool verbose;
+    bool slow;
+    int wait_time;
+  };
+
+  int int_input(std::string prompt = "",
+                std::string retry_prompt = "Number : ");
+
+  void wait_time_adjustment(Options& options);
+
+  int roll_dice(Options& options, int dice = 0,
+                int sides = 0);
+
+  void verbosity(Options& options, int which_die,
+                 int landing);
 }
 
 #endif //DICE_ROLLER_HPP

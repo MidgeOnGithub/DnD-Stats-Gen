@@ -5,6 +5,6 @@
 CMakeSettings.json
 
 # CMake and build files
+build/
 compile/
-bin/
-lib/
+cmake*/

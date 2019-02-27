@@ -1,7 +1,11 @@
-target_sources(DnD-Stats-Gen
+add_library(DnD-Dice 
+	STATIC
+		dice.cpp
+		dnd_dice.cpp
+)
+
+
+target_link_libraries(DnD-Dice
     PRIVATE
-        dice.cpp
-        dice.hpp
-        dnd_dice.cpp
-        dnd_dice.hpp
+		Boost::random
 )
