@@ -2,24 +2,25 @@
 
 ### Table of Contents
 * [Disclaimers](#disclaimers)
-* [Vocabulary Notes](#vocabulary-notes)
+* [Vocabulary](#vocabulary-notes)
 * [CLI Usage](#cli-usage)
 * [Integrated Dice Roller](#integrated-dice-roller)
 * [Abilities](#abilities)
 * [Saving](#saving-work)
-* [Notes](#note-to-dnd-players-and-dms)
+* [Notes for Users](#notes-for-dnd-players-and-dms)
+* [Notes for Developers](#notes-for-developers)
 
-#### Disclaimers
+### Disclaimers
 This program is not intended to represent an official *Dungeons and Dragons* nor *Wizards of the Coast* product.
 All product and company names are trademarks™ or registered trademarks® of their respective holders.
 Use of them does not imply any affiliation with nor endorsement by them.
 
-External packages which are not Boost can be found in the `vendor` folder, along with their respective licenses, which will be included with any Releases of this program.
+External packages which are not Boost can be found in the `vendor` folder, along with their respective licenses (and the Boost license), which will be included with any Releases of this program.
 
-#### Vocabulary Notes
+### Vocabulary
 * The game referenced: `Dungeons and Dragons` (`DnD`)
 * Players have adventures/sessions created/led/guided by a `Dungeon Master` (`DM`)
-* In gameplay, each player acts as a `Player Character` (`PC`)
+* In gameplay, players act as a `Player Character` (`PC`)
   * `PCs` often engage with `Non-Player Characters` (`NPCs`)
 * The primary reference literature for DnD standards is the `Player's Handbook` (`PHB`)
 
@@ -43,7 +44,7 @@ DnD characters have 6 point-valued *abilities*:
 > **Strength** || **Dexterity** || **Constitution** || **Intelligence** || **Wisdom** || **Charisma**
 
 When creating their PC, the player (or their DM) must determine what point values are available to assign to their abilities.
-Some of the most popular methods to generate these values involve rolling several six-sided die (d6) and summing their rolls in some fashion.
+Some of the most popular methods to generate the values involve rolling several six-sided die (d6) and summing their rolls in some fashion.
 Currently, this program features two of the more standard random-value methods:
 * **3d6** -- wherein the values are the sums from 6 separate *3d6* rolls
 * **4d6-drop-1** -- like the 3d6 method, except 6 *4d6* rolls are performed, each with the lowest of the 4 dice discarded
@@ -53,7 +54,7 @@ Currently, this program features two of the more standard random-value methods:
 After score generation, the program interacts with you to assign the rolled scores to a PC's abilities.
 
 ##### Future Development Notes
-Assigned ability scores will eventually be affected by PC `race` chosen upon character creation.
+Assigned ability scores will eventually be affected by PC `race` chosen upon completed character creation.
 Support for 2 or more races will likely not be provided.
 > `Human` PCs receive +1 for all abilities,
 > `Dwarf` PCs get +2 for *Constitution* only, etc.
@@ -64,10 +65,26 @@ Also, the "point buy" ability score generation method described in the PHB will 
 The program user may use command-line arguments to indicate that they wish (or don't wish) for the program to output a result to a `.txt` file.
 If no such arguments are given, the program will offer to write out a character summary to a `.txt` file: if you accept, the program interacts with you to overwrite or create a new file.
 
-### Note to DnD Players and DMs
-All features of the program are/will be based on the latest edition of "Dungeons and Dragons" and its *Wizards of the Coast* expansions.
+### Notes for DnD Players and DMs
+All features of the program are/will be based on the latest edition of "Dungeons and Dragons" and its *Wizards of the Coast* expansions (excluding experimental publications, such as "Unearthed Arcana").
+Correct generation of data will be handled by the submodule https://github.com/MidgeOnGithub/DnD-Data/.
 The `master` branch of this repo will not attempt to account for older editions nor include third-party expansions.
-If the program ever appears to have erroneously done so, or has failed to account for official content, please report discrepancies.
+If the program or code appears to have erroneously done so or has failed to account for official content, please report discrepancies.
 
-In general, the program will try to emphasize the creation of characters that are legal for use by Adventurer's League (`AL`) guidelines.
-Characters with properties disallowed from AL will be allowed to be generated if it falls within PHB rules; incompliance with AL will be noted in program output(s).
+In general, the program emphasizes the creation of characters that are legal for use by Adventurer's League (`AL`) guidelines.
+Characters with properties disallowed from AL can still be generated if it falls within PHB rules; incompliance with AL will be noted in program output(s).
+
+### Notes for Developers
+#### Submodules
+This repo makes use of several git `submodules`.
+Thus, when cloning this repo, assuming a version of git >= 2.13, use `recurse-submodules` to automatically populate submodules:
+* `git clone --recurse-submodules -j4 git://github.com/MidgeOnGithub/DnD-Stats-Gen.git`
+
+With older versions of git or if you prefer a two-step process:
+* `git clone git://github.com/MidgeOnGithub/DnD-Stats-Gen.git`
+* cd into the repo directory
+* `git submodule update --init --recursive`
+
+See https://stackoverflow.com/a/4438292/10466817 for more details.
+#### Dependencies
+Third-party libraries are included in the `vendor` folder as submodules. Boost, however, is implemented via CMake's `find-package` command, accompanied by a license file in said folder. Consult other sources for information about how to install Boost for your OS.
