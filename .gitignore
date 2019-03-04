@@ -2,9 +2,9 @@
 .idea/
 .vscode/
 .vs/
-CMakeSettings.json
 
 # CMake and build files
 build/
 compile/
 cmake*/
+CMakeSettings.json
