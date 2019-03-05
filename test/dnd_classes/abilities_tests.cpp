@@ -54,8 +54,7 @@ TEST_F(AbilitiesTests, TestActiveScoresNormalization) {
 }
 
 TEST_F(AbilitiesTests, TestGetAllScoresOfTypeReturn) {
-  std::array<int, 6> scores;
-  scores = ab.get_all_scores_of_type(Score::generated);
+  std::array<int, 6> scores = ab.get_all_scores_of_type(Score::generated);
   for (int i = 0; i < 6; ++i) {
     ASSERT_EQ(scores[i], corrected_scores[i]);
   }

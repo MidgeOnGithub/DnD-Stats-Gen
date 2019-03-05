@@ -23,7 +23,7 @@ struct Program_Args {
 };
 
 static bool should_file_be_written(Program_Args& args);
-static void file_output(std::string file_name, const std::string& out_text);
+static void file_output(std::string file_name, const std::string &out_text);
 static std::array<int, 6> generate_scores(Program_Args& args);
 
 static po::options_description set_cli_args_and_description() {
@@ -96,7 +96,7 @@ static bool parse_args(int argc, const char *argv[],
       }
       args.ephemeral = true;
     } else if (vm.count("output")) {
-      args.f_name = vm["output"].as<std::string>();
+      args.f_name = vm["output"].as<std::string>() + ".txt";
     }
 
   } catch (const po::error &ex) {
@@ -201,7 +201,6 @@ static std::string get_file_name() {
     std::cout << "What should the file be named? "
                  "(\".txt\" will be appended): ";
     getline(std::cin, file_name);
-    // TODO: Handle bad file names (e.g., @%&.txt)
   }
   return file_name + ".txt";
 }
@@ -215,13 +214,9 @@ static bool file_already_exists(const std::string& file_name) {
   }
 }
 
-/* Write out_text to a file. */
-static void file_output(std::string file_name, const std::string& out_text) {
+static void file_name_handler(std::string& file_name){
   if (file_name.empty())
     file_name = get_file_name();
-  else
-    file_name += ".txt";
-
   bool good_to_go = false;
   while (!good_to_go) {
     if (file_already_exists(file_name)) {
@@ -234,16 +229,28 @@ static void file_output(std::string file_name, const std::string& out_text) {
       good_to_go = true;
     }
   }
+}
 
-  std::ofstream file;
-  if (file) {
-    file.open(file_name.c_str());
-    file << out_text;
-    file.close();
-    std::cout << "Successfully wrote summary to `"
-              << file_name << '`' << std::endl;
-  } else {
-    std::cout << "Sorry, could not successfully open the file!\n"
-              << "Check space, memory, and permissions." << std::endl;
+/* Write out_text to a file. */
+static void file_output(std::string file_name, const std::string& out_text) {
+  bool finished = false;
+  while(!finished) {
+    file_name_handler(file_name);
+    std::ofstream file(file_name, std::ofstream::out);
+
+    if (file.is_open()) {
+      file << out_text;
+      std::cout << "Successfully wrote summary to `"
+                << file_name << '`' << std::endl;
+      finished = true;
+    } else {
+      std::cout << "\nERROR! Could not open the file for writing!\n"
+                << "If you are sure `" << file_name << "`was valid,\n"
+                << "check space, memory, and permissions limitations.\n"
+                << std::endl;
+      file_name.clear();  // Prevent infinite "retry" loop
+      std::cout << "Retry? (y/n): ";
+      finished = !get_confirmation();
+    }
   }
 }

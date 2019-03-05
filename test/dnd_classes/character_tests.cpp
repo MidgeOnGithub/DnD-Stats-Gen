@@ -19,6 +19,6 @@ TEST_F(CharacterTests, TestBuilderFluency) {
 }
 
 TEST_F(CharacterTests, TestCharacterCreateMethodIsEquivalent) {
-  Character test = Character::create().give_name(test_name).give_generated_scores(scores);
-  ASSERT_EQ(with_name.pc.get_name(), test.get_name().c_str());
+  Character by_create = Character::create().give_name(test_name).give_generated_scores(scores);
+  ASSERT_EQ(with_name.pc.get_name(), by_create.get_name());
 }

@@ -37,7 +37,5 @@ CharacterBuilder& CharacterBuilder::give_name(std::string name) {
 };
 
 CharacterBuilder::operator Character() const {
-  Character character = this->pc;
-  this->~CharacterBuilder();
-  return character;
+  return this->pc;
 }
