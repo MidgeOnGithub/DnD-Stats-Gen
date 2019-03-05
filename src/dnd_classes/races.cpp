@@ -1,9 +1,13 @@
+#include <utility>
+
 #include "races.hpp"
 
 Race::Race(json race_data)
 {
   // TODO: Assign values to member variables from json data
 }
+
+Race::~Race() = default;
 
 std::string Race::get_name()
 {
@@ -12,7 +16,7 @@ std::string Race::get_name()
 
 void Race::set_name(std::string new_name)
 {
-  name = new_name;
+  name = std::move(new_name);
 }
 
 bool Race::is_adventure_league_compliant()

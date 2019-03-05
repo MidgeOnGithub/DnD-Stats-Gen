@@ -7,7 +7,6 @@
 
 #include "../dice_roller/dice.hpp"
 
-
 enum class Ability {
   Strength     = 0,
   Dexterity    = 1,
@@ -42,21 +41,22 @@ const std::array<std::string, 6> ability_names = {
 };
 
 class Abilities {
-
 public:
   Abilities();
-  Abilities(std::array<int, 6> generated_scores);
+  explicit Abilities(std::array<int, 6>& generated_scores);
+  virtual ~Abilities();
 
-  int get_score(Ability ability, Score flag);
-  void set_score(Ability ability, Score flag, int value);
+  int get_score(const Ability& ability, const Score& flag);
+  void set_score(const Ability& ability, const Score& flag,
+                 int value);
 
-  std::array<int, 6> get_all_scores_of_type(Score flag);
-  void set_all_scores_of_type(Score flag, std::array<int, 6>& scores);
+  std::array<int, 6> get_all_scores_of_type(const Score& flag);
+  void set_all_scores_of_type(const Score& flag, std::array<int, 6>& scores);
 
 private:
   // Dictionary mapping ability names to active scores
   std::map<Ability, Ability_Scores> ability_scores;
-  void update_active_score(Ability ability);
+  void update_active_score(const Ability& ability);
 };
 
 #endif  // DND_ABILITIES_HPP

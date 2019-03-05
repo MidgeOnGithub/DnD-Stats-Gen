@@ -24,7 +24,8 @@ json race_choice(); // Get the user's choice of character race
 class Race {
 
 public:
-  Race(json stats);
+  explicit Race(json stats);
+  virtual ~Race();
 
   std::string get_name();
   void set_name(std::string new_name);

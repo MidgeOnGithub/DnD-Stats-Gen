@@ -2,22 +2,23 @@
 
 #include "../../src/dnd_classes/character.hpp"
 
-/*
-class CharacterTests: public ::testing::Test {
+class CharacterTests : public ::testing::Test {
 public:
 protected:
-  Character pc = Character("Name");
+  CharacterBuilder builder = CharacterBuilder();
+  std::string test_name = "BuilderTest";
+  std::array<int, 6> scores = {3, 4, 5, 6, 7, 8};
+  CharacterBuilder with_name = CharacterBuilder(test_name);
 };
-*/
 
-TEST(CharacterTests, TestDefaultName) {
-  Character test = Character();
-  std::string default_name = "PC";
-  ASSERT_EQ(test.get_name(), default_name.c_str());
+TEST_F(CharacterTests, TestBuilderFluency) {
+  std::string name = "FluentBuilder";
+  builder.give_name(name).give_generated_scores(scores);
+  ASSERT_EQ(builder.pc.get_name(), name.c_str());
+  ASSERT_EQ(builder.pc.ab.get_all_scores_of_type(Score::generated), scores);
 }
 
-TEST(CharacterTests, TestOverloadedConstructionName) {
-  Character test = Character("Name");
-  std::string default_name = "PC";
-  ASSERT_NE(test.get_name(), default_name.c_str());
+TEST_F(CharacterTests, TestCharacterCreateMethodIsEquivalent) {
+  Character test = Character::create().give_name(test_name).give_generated_scores(scores);
+  ASSERT_EQ(with_name.pc.get_name(), test.get_name().c_str());
 }

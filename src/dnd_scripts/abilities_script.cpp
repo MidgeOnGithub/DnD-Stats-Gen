@@ -108,8 +108,8 @@ namespace AbilityScripts {
     std::cout << std::endl;
   }
 
-  static void print_scores_left(std::array<bool, 6>& assigned,
-                                std::array<int, 6>& generated_scores) {
+  static void print_scores_left(const std::array<bool, 6>& assigned,
+                                const std::array<int, 6>& generated_scores) {
     std::cout << "Available scores: [";
     for (int i = 0; i < 6; ++i) {
       // Skip writing the value if already assigned

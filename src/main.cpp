@@ -23,7 +23,7 @@ struct Program_Args {
 };
 
 static bool should_file_be_written(Program_Args& args);
-static void file_output(std::string file_name, std::string out_text);
+static void file_output(std::string file_name, const std::string& out_text);
 static std::array<int, 6> generate_scores(Program_Args& args);
 
 static po::options_description set_cli_args_and_description() {
@@ -121,21 +121,25 @@ int main(int argc, const char *argv[]) {
   std::cout << "\nWelcome to the DnD Stats Generator!\n"
             << "=================================\n" << std::endl;
 
-  // Get the generated character's name and create the character class
-  std::string character_name = CharacterScripts::name_input();
-  auto pc = Character(character_name);
-  
-  // Interface with user to generate and assign ability scores
+  // Build the character step-by-step
+  std::string pc_name = CharacterScripts::name_input();
+  CharacterBuilder pc_builder = CharacterBuilder(pc_name);
+
   std::array<int, 6> generated_scores = generate_scores(cli_args);
-  pc.ab.set_all_scores_of_type(Score::generated, generated_scores);
-  // TODO: Turn this pretty-print loop into an AbilityScripts
-  //  or otherwise re-callable function
+  pc_builder.give_generated_scores(generated_scores);
+
+  // TODO: Turn this pretty-print section into an AbilityScripts
+  //  or otherwise reusable function
   std::cout << "\nGenerated ability scores:\n";
   for (auto& score : generated_scores) {
     std::cout << std::setw(2) << std::setfill('0') << score << " ";
   }
   std::cout << '\n' << std::endl;
-  AbilityScripts::assign_generated_scores(pc.ab);
+
+  AbilityScripts::assign_generated_scores(pc_builder.pc.ab);
+
+  // Once complete, finish the character build
+  Character pc = pc_builder;
 
   // Print a summary of the final results
   std::string full_summary = CharacterScripts::write_summary(pc);
@@ -160,15 +164,12 @@ static std::array<int, 6> generate_scores(Program_Args& args) {
     case 1 :
       std::cout << "\nChosen method: 4d6\n" << std::endl;
       return AbilityScripts::generate_4d6(args.roll_options);
-
     case 2 :
       std::cout << "\nChosen method: 3d6\n" << std::endl;
       return AbilityScripts::generate_3d6(args.roll_options);
-
     case 3 : // Option not implemented yet, method_choice prevents case
       std::cout << "\nChosen method: Point-Buy\n" << std::endl;
       return AbilityScripts::point_buy(args.roll_options);
-
     default:
       std::cerr << "Bad method_choice return." << std::endl;
       exit(2);
@@ -205,7 +206,7 @@ static std::string get_file_name() {
   return file_name + ".txt";
 }
 
-static bool file_already_exists(std::string file_name) {
+static bool file_already_exists(const std::string& file_name) {
   if (FILE *file = fopen(file_name.c_str(), "r")) {
     fclose(file);
     return true;
@@ -215,7 +216,7 @@ static bool file_already_exists(std::string file_name) {
 }
 
 /* Write out_text to a file. */
-static void file_output(std::string file_name, std::string out_text) {
+static void file_output(std::string file_name, const std::string& out_text) {
   if (file_name.empty())
     file_name = get_file_name();
   else
@@ -243,7 +244,6 @@ static void file_output(std::string file_name, std::string out_text) {
               << file_name << '`' << std::endl;
   } else {
     std::cout << "Sorry, could not successfully open the file!\n"
-              << "Check space, memory, and permissions."
-              << std::endl;
+              << "Check space, memory, and permissions." << std::endl;
   }
 }
