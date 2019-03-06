@@ -18,10 +18,11 @@ namespace AbilityScripts {
   std::array<int, 6> point_buy(dice_roller::Options &options);
   
   // Interface with user to assign scores to abilities
-  void assign_generated_scores(Abilities ab);
+  void assign_generated_scores(Abilities& ab);
 
-  // Pretty-print method
-  std::string write_score_summary(Abilities ab, Score flag);
+  // Pretty-print functions
+  void print_set_of_scores(const std::array<int, 6>& scores);
+  std::string summary_of_all_scores(Abilities &ab, const Score &flag);
 
 }
 

@@ -131,7 +131,7 @@ namespace AbilityScripts {
     std::cout << "]" << std::endl;
   }
 
-  void assign_generated_scores(Abilities ab) {
+  void assign_generated_scores(Abilities& ab) {
     // Create a copy of the abilities' generated scores
     std::array<int, 6> scores = {};
     for (int i = 0; i < 6; ++i) {
@@ -191,7 +191,17 @@ namespace AbilityScripts {
   }
 
 
-  std::string write_score_summary(Abilities ab, Score flag) {
+  void print_set_of_scores(const std::array<int, 6>& scores) {
+    std::cout << "[";
+    for (int i = 0; i < 6; ++i) {
+      std::cout << std::setw(2) << std::setfill('0') << scores[i];
+      if (i != 5)
+        std::cout << ", ";
+    }
+    std::cout << "]\n" << std::endl;
+  }
+
+  std::string summary_of_all_scores(Abilities &ab, const Score &flag) {
     std::array<int, 6> scores = ab.get_all_scores_of_type(flag);
     // Use ostringstream to format as if using std::cout
     std::ostringstream summary;

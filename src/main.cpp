@@ -121,25 +121,22 @@ int main(int argc, const char *argv[]) {
   std::cout << "\nWelcome to the DnD Stats Generator!\n"
             << "=================================\n" << std::endl;
 
-  // Build the character step-by-step
+  // Build the character step-by-step **
+  // ** 1: Name
   std::string pc_name = CharacterScripts::name_input();
-  CharacterBuilder pc_builder = CharacterBuilder(pc_name);
+  CharacterBuilder character_builder = CharacterBuilder(pc_name);
 
+  // ** 2: Ability score generation and assignment
   std::array<int, 6> generated_scores = generate_scores(cli_args);
-  pc_builder.give_generated_scores(generated_scores);
+  character_builder.give_generated_scores(generated_scores);
 
-  // TODO: Turn this pretty-print section into an AbilityScripts
-  //  or otherwise reusable function
   std::cout << "\nGenerated ability scores:\n";
-  for (auto& score : generated_scores) {
-    std::cout << std::setw(2) << std::setfill('0') << score << " ";
-  }
-  std::cout << '\n' << std::endl;
+  AbilityScripts::print_set_of_scores(generated_scores);
 
-  AbilityScripts::assign_generated_scores(pc_builder.pc.ab);
+  AbilityScripts::assign_generated_scores(character_builder.pc.ab);
 
-  // Once complete, finish the character build
-  Character pc = pc_builder;
+  // ** Finalize
+  Character pc = character_builder;
 
   // Print a summary of the final results
   std::string full_summary = CharacterScripts::write_summary(pc);
