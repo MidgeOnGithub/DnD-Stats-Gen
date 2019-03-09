@@ -10,7 +10,5 @@ target_sources(Tests
 target_link_libraries(Tests
     PRIVATE
         DnD-Classes
-        gmock
         gtest
-        nlohmann_json::nlohmann_json
 )

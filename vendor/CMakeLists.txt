@@ -1,8 +1,8 @@
 #### Google's test suite
-add_subdirectory(googletest EXCLUDE_FROM_ALL)
+find_package(GTest REQUIRED)
+#find_package(GMock REQUIRED)  <-- Not utilized (yet?)
 #### End GTest section
 
 #### nlohmann's JSON library
-set(JSON_BuildTests OFF CACHE INTERNAL "")
-add_subdirectory(json)
+find_package(nlohmann_json 3.5.0 REQUIRED)
 #### End JSON section

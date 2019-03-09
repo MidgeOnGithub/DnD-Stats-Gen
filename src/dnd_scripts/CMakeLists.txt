@@ -8,5 +8,4 @@ add_library(DnD-Scripts
 target_link_libraries(DnD-Scripts
     PRIVATE
         DnD-Dice
-        nlohmann_json::nlohmann_json
 )

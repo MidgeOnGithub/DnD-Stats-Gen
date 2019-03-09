@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "../../vendor/json/single_include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 #include "abilities.hpp"

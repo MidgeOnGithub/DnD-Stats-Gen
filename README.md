@@ -67,7 +67,7 @@ If no such arguments are given, the program will offer to write out a character 
 
 ### Notes for DnD Players and DMs
 All features of the program are/will be based on the latest edition of "Dungeons and Dragons" and its *Wizards of the Coast* expansions (excluding experimental publications, such as "Unearthed Arcana").
-Correct generation of data will be handled by the submodule https://github.com/MidgeOnGithub/DnD-Data/.
+Correct generation of game data will be handled by the submodule https://github.com/MidgeOnGithub/DnD-Data/.
 The `master` branch of this repo will not attempt to account for older editions nor include third-party expansions.
 If the program or code appears to have erroneously done so or has failed to account for official content, please report discrepancies.
 
@@ -76,7 +76,7 @@ Characters with properties disallowed from AL can still be generated if it falls
 
 ### Notes for Developers
 #### Submodules
-This repo makes use of several git `submodules`.
+This repo makes use of git `submodules`.
 Thus, when cloning this repo, assuming a version of git >= 2.13, use `recurse-submodules` to automatically populate submodules:
 * `git clone --recurse-submodules -j4 git://github.com/MidgeOnGithub/DnD-Stats-Gen.git`
 
@@ -87,4 +87,11 @@ With older versions of git or if you prefer a two-step process:
 
 See https://stackoverflow.com/a/4438292/10466817 for more details.
 #### Dependencies
-Third-party libraries are included in the `vendor` folder as submodules. Boost, however, is implemented via CMake's `find-package` command, accompanied by a license file in said folder. Consult other sources for information about how to install Boost for your OS.
+Third-party licenses are included in the `vendor` folder.
+Boost, GoogleTest, and nlohmann's JSON are included into the project using CMake's `find_package` command.
+Consult other sources for information about how to install them for your OS.
+
+Links:
+* https://www.boost.org/
+* https://github.com/google/googletest
+* https://github.com/nlohmann/json
