@@ -49,7 +49,6 @@ namespace AbilityScripts {
     return choice;
   }
 
-
   static void print_rolled_score(int index, int score) {
     // Describe the score value (index + 1 for natural counting)
     int display = index + 1;
@@ -92,11 +91,10 @@ namespace AbilityScripts {
   }
 
   // TODO : Implement point_buy
-  std::array<int, 6> point_buy(dice_roller::Options &options) {
+  std::array<int, 6> point_buy(dice_roller::Options& options) {
     std::array<int, 6> generated_scores{};
 	return generated_scores;
   }
-
 
   static void print_response_to_invalid_score(int invalid_score) {
     if (invalid_score > 18)
@@ -190,7 +188,6 @@ namespace AbilityScripts {
     }  // end for loop
   }
 
-
   void print_set_of_scores(const std::array<int, 6>& scores) {
     std::cout << "[";
     for (int i = 0; i < 6; ++i) {
@@ -201,7 +198,7 @@ namespace AbilityScripts {
     std::cout << "]\n" << std::endl;
   }
 
-  std::string summary_of_all_scores(Abilities &ab, const Score &flag) {
+  std::string summary_of_all_scores(Abilities& ab, const Score& flag) {
     std::array<int, 6> scores = ab.get_all_scores_of_type(flag);
     // Use ostringstream to format as if using std::cout
     std::ostringstream summary;

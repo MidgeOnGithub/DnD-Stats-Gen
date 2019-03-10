@@ -7,7 +7,7 @@ namespace CharacterScripts {
 
   std::string name_input();
 
-  std::string write_summary(Character pc);
+  std::string write_summary(Character& pc);
 
 }
 

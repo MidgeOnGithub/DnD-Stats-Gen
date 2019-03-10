@@ -16,7 +16,6 @@ int dnd_roll(dice_roller::Options& options, int dice, int sides) {
    * Based on what kind of die, call the correct function
    * Functions within this source file call dice_roller::roll_dice
    * Or make changes to printed values accordingly */
-  // TODO: DRY with wait_time checks (also in dice files)
   // Ensure wait_time works "as intended"
   dice_roller::wait_time_adjustment(options);
 

@@ -17,7 +17,7 @@ namespace CharacterScripts {
     return character_name;
   }
 
-  std::string write_summary(Character pc) {
+  std::string write_summary(Character& pc) {
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
     // Basic info
