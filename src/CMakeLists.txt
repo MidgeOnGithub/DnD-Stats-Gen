@@ -11,6 +11,7 @@ add_subdirectory(dnd_scripts)  # DnD-Scripts Lib
 
 target_link_libraries(DnD
     PRIVATE
+		-static
 	    Boost::program_options
         DnD-Dice
         DnD-Classes

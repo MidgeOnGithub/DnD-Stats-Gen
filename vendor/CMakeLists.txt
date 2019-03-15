@@ -1,6 +1,5 @@
 #### Google's test suite
 find_package(GTest REQUIRED)
-#find_package(GMock REQUIRED)  <-- Not utilized (yet?)
 #### End GTest section
 
 #### nlohmann's JSON library
