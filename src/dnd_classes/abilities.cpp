@@ -10,52 +10,49 @@
 Abilities::Abilities() = default;
 
 Abilities::Abilities(std::array<int, 6>& generated_scores) {
-  for (short i = 0; i < 6; ++i) {
-    Ability ability = All_Abilities[i];
-    set_score(ability, Score::generated, generated_scores[i]);
-  };
+  set_all_scores_of_type(Score::generated, generated_scores);
 }
 
 Abilities::~Abilities() = default;
 
 int Abilities::get_score(const Ability& ability, const Score& flag) {
-  switch (flag) {
-    case Score::active :
-      return ability_scores[ability].active;
-    case Score::generated :
-      return ability_scores[ability].generated;
-    case Score::modifier :
-      return ability_scores[ability].modifier;
-  }
+  if (flag == Score::active)
+    return ability_scores[ability].active;
+  else if (flag == Score::generated)
+    return ability_scores[ability].generated;
+  // If not from the above, it must be the modifier
+  return ability_scores[ability].modifier;
 }
 
 void Abilities::set_score(const Ability& ability, const Score& flag,
                           int value) {
   if (flag == Score::generated) {
-    // 18 is the maximum value that may be generated
+    // 18 is the maximum value that may be generated, 3 is the minimum
     value = (value > 18) ? 18 : value;
     value = (value < 03) ? 03 : value;
     ability_scores[ability].generated = value;
-  } else {
+  } else if (flag == Score::modifier) {
     ability_scores[ability].modifier = value;
+  } else {
+    ability_scores[ability].active = value;
   }
   update_active_score(ability);
 }
 
 void Abilities::update_active_score(const Ability& ability) {
-  int value = ability_scores[ability].generated;
-  value += ability_scores[ability].modifier;
+  auto& score_trio = ability_scores[ability];
+  int combined = score_trio.generated + score_trio.modifier;
   // 20 is the maximum active score, 0 is the minimum
-  value = (value > 20) ? 20 : value;
-  value = (value < 00) ? 00 : value;
-  ability_scores[ability].active = value;
+  combined = (combined > 20) ? 20 : combined;
+  combined = (combined < 00) ? 00 : combined;
+  score_trio.active = combined;
 }
 
 std::array<int, 6> Abilities::get_all_scores_of_type(const Score& flag) {
   std::array<int, 6> scores = {};
   for (int i = 0; i < 6; ++i) {
     scores[i] = get_score(All_Abilities[i], flag);
-  };
+  }
   return scores;
 }
 

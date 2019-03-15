@@ -15,28 +15,27 @@ protected:
                                                         .give_score_modifiers(mod_scores);
 };
 
-TEST_F(CharacterBuilderTests, TestCharacterCreateIsEquivalent) {
-  Character by_create = Character::create().give_name(test_name)
+TEST_F(CharacterBuilderTests, TestCharacterMemberIsEquivalent) {
+  Character by_create = Character::Builder().give_name(test_name)
                                            .give_generated_scores(gen_scores)
                                            .give_score_modifiers(mod_scores);
   ASSERT_EQ(builder.pc.get_name(), by_create.get_name());
-  ASSERT_EQ(builder.pc.ab.get_all_scores_of_type(Score::active),
-            by_create.ab.get_all_scores_of_type(Score::active));
+  ASSERT_EQ(builder.pc.abilities.get_all_scores_of_type(Score::active),
+            by_create.abilities.get_all_scores_of_type(Score::active));
 }
 
 class CharacterLevelerTests: public ::testing::Test {
 public:
 protected:
-  Character character = Character::create().give_name("LevelTest")
-                                           .give_generated_scores(gen_scores)
-                                           .give_score_modifiers(mod_scores);
+  Character character = Character::Builder().give_name("LevelTest")
+                                            .give_generated_scores(gen_scores)
+                                            .give_score_modifiers(mod_scores);
   CharacterLeveler leveler = CharacterLeveler(character);
 };
 
 TEST_F(CharacterLevelerTests, TestLevelAdvancesAtThresholds) {
-  leveler.give_experience(100);
   ASSERT_EQ(character.get_level(), 1);
-  leveler.give_experience(200);         // Level 2: 300
+  leveler.give_experience(300);         // Level 2: 300
   ASSERT_EQ(character.get_level(), 2);
   leveler.give_experience(600);         // Level 3: 900
   ASSERT_EQ(character.get_level(), 3);
@@ -94,8 +93,8 @@ TEST_F(CharacterLevelerTests, TestLevelerReturnsEditedCharacter) {
   ASSERT_EQ(new_pc_that_should_be_level_5.get_level(), 5);
 }
 
-TEST_F(CharacterLevelerTests, TestCharacterAdvanceIsEquivalent) {
-  character.advance().give_experience(300).increase_level(3);
+TEST_F(CharacterLevelerTests, TestCharacterMemberIsEquivalent) {
+  character.Leveler().give_experience(300).increase_level(3);
   ASSERT_EQ(character.get_level(), 5);
   ASSERT_EQ(character.get_experience(), 6500);
 }

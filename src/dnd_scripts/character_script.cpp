@@ -26,7 +26,7 @@ namespace CharacterScripts {
     summary << "Level: 1" << std::endl << std::endl;
     // Ability-related info
     Score flag = Score::active;
-    summary << AbilityScripts::summary_of_all_scores(pc.ab, flag);
+    summary << AbilityScripts::summary_of_all_scores(pc.abilities, flag);
     return summary.str();
   }
 

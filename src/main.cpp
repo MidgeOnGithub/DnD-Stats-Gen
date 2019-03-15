@@ -16,6 +16,7 @@ namespace po = boost::program_options;
 #include "dnd_scripts/races_script.hpp"
 #include "dice_roller/dice.hpp"
 
+
 struct Program_Args {
   dice_roller::Options roll_options{};
   std::string f_name;  // Left blank if not given
@@ -133,7 +134,7 @@ int main(int argc, const char *argv[]) {
   std::cout << "\nGenerated ability scores:\n";
   AbilityScripts::print_set_of_scores(generated_scores);
 
-  AbilityScripts::assign_generated_scores(character_builder.pc.ab);
+  AbilityScripts::assign_generated_scores(character_builder.pc.abilities);
 
   // ** Finalize
   Character pc = character_builder;

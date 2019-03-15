@@ -14,17 +14,16 @@ struct CharacterBuilder;
 struct CharacterLeveler;
 
 // TODO: Consider adding basic appearance (weight, height, etc.)
-// TODO: Add Level/Experience struct(s)/class(es)
 class Character {
   friend struct CharacterBuilder;
   friend struct CharacterLeveler;
 public:
   virtual ~Character();
 
-  static CharacterBuilder create();
-  CharacterLeveler advance();
+  static CharacterBuilder Builder();
+  CharacterLeveler Leveler();
 
-  Abilities ab;
+  Abilities abilities;
   // Other unimplemented aspects of a PC
   //class cls
   //inventory inv (not going to be implemented by me any time soon)
@@ -40,7 +39,6 @@ private:
   std::string name = "PC";
   unsigned int level = 1;
   unsigned int experience = 0;
-
 };
 
 
@@ -51,7 +49,7 @@ struct CharacterBuilder {
 
   operator Character() const;
 
-  CharacterBuilder& give_name(std::string name);
+  CharacterBuilder& give_name(std::string name_to_give);
   CharacterBuilder& give_generated_scores(std::array<int, 6>& scores);
   CharacterBuilder& give_score_modifiers(std::array<int, 6>& modifiers);
 
@@ -63,15 +61,11 @@ struct CharacterLeveler {
   explicit CharacterLeveler(Character& pc);
   virtual ~CharacterLeveler();
 
-  // TODO: If reasonably possible, allow a totally new character
-  //  to obtain the results of a Character after it has been edited
-  //  by a CharacterLeveler instance
   operator Character() const;
 
   CharacterLeveler& give_experience(unsigned int experience);
   CharacterLeveler& increase_level(unsigned int how_many = 1);
 
-  const static std::array<unsigned int, 19> level_up_thresholds;
   Character& pc;
 };
 

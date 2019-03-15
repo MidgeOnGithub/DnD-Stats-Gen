@@ -7,6 +7,7 @@
 
 #include "../dice_roller/dice.hpp"
 
+
 enum class Ability {
   Strength     = 0,
   Dexterity    = 1,
@@ -16,7 +17,7 @@ enum class Ability {
   Charisma     = 5
 };
 
-const std::array<Ability, 6> All_Abilities = {
+constexpr std::array<Ability, 6> All_Abilities = {
   Ability::Strength, Ability::Dexterity, Ability::Constitution,
   Ability::Intelligence, Ability::Wisdom, Ability::Charisma
 };
@@ -52,7 +53,6 @@ public:
 
   std::array<int, 6> get_all_scores_of_type(const Score& flag);
   void set_all_scores_of_type(const Score& flag, std::array<int, 6>& scores);
-
 private:
   // Dictionary mapping ability names to active scores
   std::map<Ability, Ability_Scores> ability_scores;

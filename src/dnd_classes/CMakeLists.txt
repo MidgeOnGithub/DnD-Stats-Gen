@@ -3,4 +3,4 @@ add_library(DnD-Classes
         abilities.cpp
         character.cpp
         races.cpp
-)
+        )

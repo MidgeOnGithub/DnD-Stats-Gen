@@ -184,7 +184,7 @@ namespace AbilityScripts {
           print_response_to_invalid_score(chosen_score);
         }
       }  // end while loop
-      ab.set_score(ability, Score::active, chosen_score);
+      ab.set_score(ability, Score::generated, chosen_score);
     }  // end for loop
   }
 
