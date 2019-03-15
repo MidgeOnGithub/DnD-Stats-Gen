@@ -5,10 +5,10 @@
 #include <sstream>
 #include <string>
 
-#include "abilities_script.hpp"
+#include "abilities_scripts.hpp"
 
 
-namespace AbilityScripts {
+namespace AbilitiesScripts {
 
   static std::string write_prompt() {
     // Use ostringstream to format as if using std::cout
@@ -51,8 +51,7 @@ namespace AbilityScripts {
 
   static void print_rolled_score(int index, int score) {
     // Describe the score value (index + 1 for natural counting)
-    int display = index + 1;
-    std::cout << "Roll " << display << " = "
+    std::cout << "Roll " << index + 1 << " = "
               << std::setw(2) << score << std::endl;
   }
 
@@ -213,4 +212,5 @@ namespace AbilityScripts {
     // Return as a string
     return summary.str();
   }
-}
+
+}  // namespace AbilitiesScripts

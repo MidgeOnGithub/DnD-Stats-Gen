@@ -1,8 +1,8 @@
 add_library(DnD-Scripts
     STATIC
-        abilities_script.cpp
-        character_script.cpp
-        races_script.cpp
+    abilities_scripts.cpp
+    character_scripts.cpp
+    race_scripts.cpp
 )
 
 target_link_libraries(DnD-Scripts

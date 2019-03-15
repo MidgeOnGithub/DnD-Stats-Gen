@@ -2,8 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "abilities_script.hpp"
-#include "character_script.hpp"
+#include "abilities_scripts.hpp"
+#include "character_scripts.hpp"
 
 
 namespace CharacterScripts {
@@ -26,8 +26,8 @@ namespace CharacterScripts {
     summary << "Level: 1" << std::endl << std::endl;
     // Ability-related info
     Score flag = Score::active;
-    summary << AbilityScripts::summary_of_all_scores(pc.abilities, flag);
+    summary << AbilitiesScripts::summary_of_all_scores(pc.abilities, flag);
     return summary.str();
   }
 
-}
+}  // namespace CharacterScripts

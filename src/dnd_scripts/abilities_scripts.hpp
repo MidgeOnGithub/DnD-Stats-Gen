@@ -1,5 +1,5 @@
-#ifndef ABILITIES_SCRIPT_HPP
-#define ABILITIES_SCRIPT_HPP
+#ifndef DND_ABILITIES_SCRIPTS_HPP
+#define DND_ABILITIES_SCRIPTS_HPP
 
 #include <array>
 #include <string>
@@ -9,7 +9,7 @@
 #include "../dice_roller/dnd_dice.hpp"
 
 
-namespace AbilityScripts {
+namespace AbilitiesScripts {
 
   int method_choice(); // Get the user's choice of score generation method
 
@@ -24,6 +24,6 @@ namespace AbilityScripts {
   void print_set_of_scores(const std::array<int, 6>& scores);
   std::string summary_of_all_scores(Abilities& ab, const Score& flag);
 
-}
+}  // namespace AbilitiesScripts
 
-#endif  // ABILITIES_SCRIPT_HPP
+#endif  // DND_ABILITIES_SCRIPTS_HPP
