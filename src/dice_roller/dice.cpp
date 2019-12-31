@@ -13,8 +13,7 @@
 
 namespace dice_roller {
 
-  int int_input(std::string prompt,
-                             std::string retry_prompt) {
+  int int_input(const std::string& prompt, const std::string& retry_prompt) {
     int num;
     // If provided, display initial prompt
     std::cout << (prompt.empty() ? retry_prompt : prompt);
@@ -48,11 +47,9 @@ namespace dice_roller {
     // If not given in function call:
     // Determine how many n-sided dice to roll by input
     if (dice < 1)
-      dice = int_input("Amount of dice to roll: ",
-                       "Dice count: ");
+      dice = int_input("Amount of dice to roll: ", "Dice count: ");
     if (sides < 1)
-      sides = int_input("Sides on each die: ",
-                        "Die sides: ");
+      sides = int_input("Sides on each die: ", "Die sides: ");
 
     // Create a generator based on OS-specific non-deterministic RNG
     boost::random::random_device engine;
@@ -72,11 +69,9 @@ namespace dice_roller {
     return roll_sum;
   }
 
-  void verbosity(Options &options, int which_die,
-                              int landing) {
+  void verbosity(Options &options, int which_die, int landing) {
     std::cout << "Die " << which_die << ": " << landing << std::endl;
     if (options.slow)
       std::this_thread::sleep_for(std::chrono::milliseconds(options.wait_time));
   }
-
 }

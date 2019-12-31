@@ -2,7 +2,6 @@
 //  ensuring data JSON files exist
 #include <array>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <string>
 #include <boost/program_options.hpp>
@@ -61,8 +60,7 @@ static po::options_description set_cli_args_and_description() {
 /* "Dirty" function. Alters arguments and returns a bool.
  * Tries to parse and evaluate command line args;
  * the returned bool tells the caller if it should continue. */
-static bool parse_args(int argc, const char *argv[],
-                       Program_Args& args) {
+static bool parse_args(int argc, const char *argv[], Program_Args& args) {
   po::options_description desc = set_cli_args_and_description();
   try {
     // Parse given command-line arguments into a variable map
@@ -71,7 +69,7 @@ static bool parse_args(int argc, const char *argv[],
     notify(vm);
 
     if (vm.count("help")) {
-      std::cout << desc << std::endl;
+      std::cout << desc << "\n";
       return false;
     }
 
@@ -91,8 +89,7 @@ static bool parse_args(int argc, const char *argv[],
     if (vm.count("no-output")) {
       if (vm.count("output")) {
         std::cerr << "Argument contradiction: -o and --no-output "
-                  << "can't be used together."
-                  << std::endl;
+                  << "can't be used together.\n";
         return false;
       }
       args.ephemeral = true;
@@ -120,7 +117,7 @@ int main(int argc, const char *argv[]) {
 
   // Introductory message
   std::cout << "\nWelcome to the DnD Stats Generator!\n"
-            << "=================================\n" << std::endl;
+            << "=================================\n\n";
 
   // Build the character step-by-step **
   // ** 1: Name
@@ -143,11 +140,11 @@ int main(int argc, const char *argv[]) {
   std::string full_summary = CharacterScripts::write_summary(pc);
 
   // Offer to output a summary (skip if user specified --no-output)
-  if (should_file_be_written(cli_args))
+  if (should_file_be_written(cli_args)) {
     file_output(cli_args.f_name, full_summary);
-  else
-    std::cout << "Per your instructions, no output was generated."
-              << std::endl;
+  } else {
+    std::cout << "Per your instructions, no output was generated.\n";
+  }
 
   // Give exit message and close
   std::cout << "\n=================================\n"
@@ -160,16 +157,16 @@ static std::array<int, 6> generate_scores(Program_Args& args) {
   // Generate ability scores based on user's method choice
   switch(AbilitiesScripts::method_choice()) {
     case 1 :
-      std::cout << "\nChosen method: 4d6\n" << std::endl;
+      std::cout << "\nChosen method: 4d6\n\n";
       return AbilitiesScripts::generate_4d6(args.roll_options);
     case 2 :
-      std::cout << "\nChosen method: 3d6\n" << std::endl;
+      std::cout << "\nChosen method: 3d6\n\n";
       return AbilitiesScripts::generate_3d6(args.roll_options);
     case 3 : // Option not implemented yet, method_choice prevents case
-      std::cout << "\nChosen method: Point-Buy\n" << std::endl;
+      std::cout << "\nChosen method: Point-Buy\n\n";
       return AbilitiesScripts::point_buy(args.roll_options);
     default:
-      std::cerr << "Bad method_choice return." << std::endl;
+      std::cerr << "Bad method_choice return.\n";
       exit(2);
   }
 }
@@ -179,7 +176,7 @@ static bool get_confirmation() {
   getline(std::cin, confirmation);
   // Get the first letter for comparison
   int letter = tolower(confirmation[0]);
-  // Default option is "Yes/Y/yes/y", so only check for "No/N/no/no"
+  // Default option is "Yes/Y/yes/y", so only check for "No/N/no/n"
   return letter != 'n';
 }
 
@@ -238,13 +235,12 @@ static void file_output(std::string file_name, const std::string& out_text) {
     if (file.is_open()) {
       file << out_text;
       std::cout << "Successfully wrote summary to `"
-                << file_name << '`' << std::endl;
+                << file_name << "`\n";
       finished = true;
     } else {
       std::cout << "\nERROR! Could not open the file for writing!\n"
                 << "If you are sure `" << file_name << "` was valid,\n"
-                << "check space, memory, and permissions limitations.\n"
-                << std::endl;
+                << "check space, memory, and permissions limitations.\n\n";
       file_name.clear();  // Prevent infinite "retry" loop
       std::cout << "Retry? (Y/n): ";
       finished = !get_confirmation();

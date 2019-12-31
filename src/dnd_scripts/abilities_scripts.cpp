@@ -17,8 +17,7 @@ namespace AbilitiesScripts {
                  << "------------------\n"
                  << "|| 1: " << std::setw(13) << "4d6 ||\n"
                  << "|| 2: " << std::setw(13) << "3d6 ||\n"
-                 << "|| 3: " << std::setw(12) << "Point-Buy ||"
-                 << "  <--  Unimplemented!!!\n"
+                 << "|| 3: " << std::setw(12) << "Point-Buy ||  <--  Unimplemented!!!\n"
                  << "------------------\n"
                  << "Choice: ";
     return write_prompt.str();
@@ -40,8 +39,7 @@ namespace AbilitiesScripts {
       choice = dice_roller::int_input(prompt);
       if (choice == 3) {
         // Temporary message while point-buy system is built
-        std::cout << "This doesn't work yet"
-                  << " -- choose another option!" << std::endl;
+        std::cout << "This doesn't work yet -- choose another option!\n";
       } else {
         good_input = (choice > 0 && choice < 3);
       }
@@ -52,7 +50,7 @@ namespace AbilitiesScripts {
   static void print_rolled_score(int index, int score) {
     // Describe the score value (index + 1 for natural counting)
     std::cout << "Roll " << index + 1 << " = "
-              << std::setw(2) << score << std::endl;
+              << std::setw(2) << score << "\n";
   }
 
   std::array<int, 6> generate_3d6(dice_roller::Options& options) {
@@ -92,7 +90,7 @@ namespace AbilitiesScripts {
   // TODO : Implement point_buy
   std::array<int, 6> point_buy(dice_roller::Options& options) {
     std::array<int, 6> generated_scores{};
-	return generated_scores;
+	  return generated_scores;
   }
 
   static void print_response_to_invalid_score(int invalid_score) {
@@ -137,8 +135,7 @@ namespace AbilitiesScripts {
     }
 
     // An array and number to track which scores have been assigned
-    std::array<bool, 6> assigned = {false, false, false,
-                                    false, false, false};
+    std::array<bool, 6> assigned = {false, false, false, false, false, false};
     int num_assigned = 0;
     std::string retry_prompt = "Score: ";
     bool first_time_asking = true;
@@ -201,12 +198,12 @@ namespace AbilitiesScripts {
     std::array<int, 6> scores = ab.get_all_scores_of_type(flag);
     // Use ostringstream to format as if using std::cout
     std::ostringstream summary;
-    summary << "Ability Scores" << std::endl
-            << "--------------------" << std::endl;
+    summary << "Ability Scores\n"
+            << "--------------------\n";
     for (int i = 0; i < 6; ++i) {
       std::string ab_name = ability_names[i];
       summary << std::setw(18) << std::left << ab_name + ": "
-              << std::setw(02) << std::right << scores[i] << std::endl;
+              << std::setw(02) << std::right << scores[i] << "\n";
     }
     summary << "--------------------" << std::endl;
     // Return as a string

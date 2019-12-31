@@ -21,9 +21,9 @@ namespace CharacterScripts {
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream summary;
     // Basic info
-    summary << "Name: " << pc.get_name() << std::endl;
+    summary << "Name: " << pc.get_name() << "\n";
     // TODO: summary << race, class, etc.  <-unimplemented
-    summary << "Level: 1" << std::endl << std::endl;
+    summary << "Level: 1" << std::endl << "\n";
     // Ability-related info
     Score flag = Score::active;
     summary << AbilitiesScripts::summary_of_all_scores(pc.abilities, flag);

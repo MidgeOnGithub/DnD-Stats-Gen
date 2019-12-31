@@ -53,6 +53,7 @@ public:
 
   std::array<int, 6> get_all_scores_of_type(const Score& flag);
   void set_all_scores_of_type(const Score& flag, std::array<int, 6>& scores);
+
 private:
   // Dictionary mapping ability names to active scores
   std::map<Ability, Ability_Scores> ability_scores;

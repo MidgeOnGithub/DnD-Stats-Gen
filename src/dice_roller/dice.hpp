@@ -12,16 +12,14 @@ namespace dice_roller {
     int wait_time;
   };
 
-  int int_input(std::string prompt = "",
-                std::string retry_prompt = "Number : ");
+  int int_input(const std::string& prompt = "",
+                const std::string& retry_prompt = "Number : ");
 
   void wait_time_adjustment(Options& options);
 
-  int roll_dice(Options& options, int dice = 0,
-                int sides = 0);
+  int roll_dice(Options& options, int dice = 0, int sides = 0);
 
-  void verbosity(Options& options, int which_die,
-                 int landing);
+  void verbosity(Options& options, int which_die, int landing);
 }
 
 #endif //DICE_ROLLER_HPP

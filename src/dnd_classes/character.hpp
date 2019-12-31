@@ -64,9 +64,15 @@ struct CharacterLeveler {
   operator Character() const;
 
   CharacterLeveler& give_experience(unsigned int experience);
-  CharacterLeveler& increase_level(unsigned int how_many = 1);
+  CharacterLeveler& remove_experience(unsigned int experience);
+  CharacterLeveler& increase_level_by(unsigned int how_many = 1);
+  CharacterLeveler& decrease_level_by(unsigned int how_many = 1);
 
   Character& pc;
+
+private:
+  CharacterLeveler& update_level_if_needed();
+  CharacterLeveler& update_experience_if_needed();
 };
 
 #endif //DND_CHARACTER_HPP

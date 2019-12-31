@@ -22,7 +22,7 @@ namespace RaceScripts {
     return data;
   }
 
-  static std::vector<json> process_raw_data(json data) {
+  static std::vector<json> process_raw_data(const json& data) {
     // TODO: Get each race object and push into vector, check this works
     std::vector<json> races;
     for (auto& object : data) {
@@ -32,10 +32,10 @@ namespace RaceScripts {
   }
 
   // TODO: Finish after doing process_raw_data
-  static std::string write_race_prompt(json races, bool subraces = false) {
+  static std::string write_race_prompt(const json& races, bool subraces = false) {
     // Use ostringstream as an easy way to format as if using std::cout
     std::ostringstream prompt;
-    for (json& race : races) {
+    for (auto race : races) {
       if (subraces) {
         // TODO: Search for subrace and variant
       } else {

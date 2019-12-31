@@ -11,10 +11,10 @@ using json = nlohmann::json;
 
 
 struct Speeds {
-  int standard;
-  int climbing;
-  int flying;
-  int swimming;
+  unsigned int standard;
+  unsigned int climbing;
+  unsigned int flying;
+  unsigned int swimming;
 };
 
 // Script functions
@@ -24,7 +24,8 @@ json race_choice(); // Get the user's choice of character race
 class Race {
 
 public:
-  explicit Race(json stats);
+  explicit Race(const json& race_data);
+
   virtual ~Race();
 
   std::string get_name();

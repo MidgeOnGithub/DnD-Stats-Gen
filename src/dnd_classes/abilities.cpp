@@ -24,8 +24,7 @@ int Abilities::get_score(const Ability& ability, const Score& flag) {
   return ability_scores[ability].modifier;
 }
 
-void Abilities::set_score(const Ability& ability, const Score& flag,
-                          int value) {
+void Abilities::set_score(const Ability& ability, const Score& flag, int value) {
   if (flag == Score::generated) {
     // 18 is the maximum value that may be generated, 3 is the minimum
     value = (value > 18) ? 18 : value;
@@ -56,8 +55,7 @@ std::array<int, 6> Abilities::get_all_scores_of_type(const Score& flag) {
   return scores;
 }
 
-void Abilities::set_all_scores_of_type(const Score& flag,
-                                       std::array<int, 6>& scores) {
+void Abilities::set_all_scores_of_type(const Score& flag, std::array<int, 6>& scores) {
   for (int i = 0; i < 6; ++i) {
     set_score(All_Abilities[i], flag, scores[i]);
   }
